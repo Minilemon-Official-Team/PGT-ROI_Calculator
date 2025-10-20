@@ -4,7 +4,7 @@ import RootLayout from "../components/layouts/RootLayout";
 
 // pages
 import Home from "../../features/home/pages";
-import Calculator from "../../features/calculator/pages";
+import CalculatorPage from "../../features/calculator/pages";
 
 export const router = createBrowserRouter([
     {
@@ -17,7 +17,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: '/kalkulator',
-                element: <Calculator />
+                element: <CalculatorPage />
             }
         ]
     }

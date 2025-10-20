@@ -1,4 +1,5 @@
 import { Field, Label, Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
+import { ChevronDown } from 'lucide-react';
 
 function DropDown({ data, title, name, onChange, value, placeholder }) {
     return (
@@ -13,12 +14,18 @@ function DropDown({ data, title, name, onChange, value, placeholder }) {
                             {value ? (
                                 <span>{value}</span>
                             ) : (
-                                <span className='text-gray-400'>{placeholder}</span>
+                                <div className='flex flex-row justify-between'>
+                                    <span className='text-gray-400'>{placeholder}</span>
+                                    <ChevronDown color='gray' size={24} />
+                                </div>
                             )}
                         </ListboxButton>
                         <ListboxOptions anchor="bottom" className="mt-4 w-96 rounded bg-white border border-gray-300 focus:outline-none">
                             {data.map((item, index) => (
-                                <ListboxOption key={index} value={item} className="mt-2 mb-2 px-4 py-2 hover:bg-gray-100 rounded">
+                                <ListboxOption
+                                    key={index}
+                                    value={item}
+                                    className="mt-2 mx-2 mb-2 px-4 py-2 hover:bg-gray-100 rounded cursor-pointer">
                                     {item}
                                 </ListboxOption>
                             ))}
