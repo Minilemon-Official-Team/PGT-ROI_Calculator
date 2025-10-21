@@ -21,20 +21,20 @@ export default function Home() {
         </div>
 
         <h1 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-3">
-          ROI Calculator & Analytics Dashboard
+          ROI Kalkulator & Dashboard Analitik
         </h1>
 
         <p className="max-w-2xl mx-auto text-gray-600 mb-6 text-sm md:text-base">
-          Make informed investment decisions with our comprehensive ROI
-          calculator. Analyze returns across NYC boroughs, compare business
-          models, and visualize your financial projections.
+          Gunakan kalkulator ROI komprehensif kami untuk membuat keputusan investasi yang lebih cerdas.
+          Evaluasi potensi pengembalian berbagai model bisnis, dan visualisasikan proyeksi keuangan Anda
+          dengan mudah.
         </p>
 
         <Link
           to="/kalkulator"
           className="inline-flex items-center bg-[#0b1020] text-white px-5 py-2 rounded-md text-sm font-medium hover:opacity-95 transition"
         >
-          <Calculator className="w-4 h-4 mr-2" /> Start Calculating ROI
+          <Calculator className="w-4 h-4 mr-2" /> Mulai Hitung ROI
         </Link>
       </section>
 
@@ -47,11 +47,11 @@ export default function Home() {
               </div>
               <div>
                 <h3 className="font-semibold text-gray-900 text-sm">
-                  ROI Calculator
+                  Kalkulator ROI
                 </h3>
                 <p className="text-sm text-gray-500 mt-1 leading-relaxed max-w-xl">
-                  Calculate return on investment with detailed input forms for
-                  location, equipment, and business models.
+                  Hitung tingkat pengembalian investasi Anda melalui formulir input lengkap yang mencakup
+                  jenis peralatan dan model bisnis yang digunakan.
                 </p>
               </div>
             </div>
@@ -64,11 +64,10 @@ export default function Home() {
               </div>
               <div>
                 <h3 className="font-semibold text-gray-900 text-sm">
-                  Analytics Dashboard
+                  Dashboard Analitik
                 </h3>
                 <p className="text-sm text-gray-500 mt-1 leading-relaxed max-w-xl">
-                  Comprehensive dashboard with interactive charts, borough
-                  comparisons, and performance metrics.
+                  Dashboard lengkap yang menampilkan grafik interaktif dan berbagai metrik kinerja utama.
                 </p>
               </div>
             </div>
@@ -98,11 +97,10 @@ export default function Home() {
               </div>
               <div>
                 <h3 className="font-semibold text-gray-900 text-sm">
-                  Business Models
+                  Model Bisnis
                 </h3>
                 <p className="text-sm text-gray-500 mt-1 leading-relaxed max-w-xl">
-                  Analyze different business models and funding options to
-                  optimize your investment strategy.
+                  Pelajari beragam model bisnis dan alternatif pendanaan guna memaksimalkan strategi investasi Anda.
                 </p>
               </div>
             </div>
@@ -113,7 +111,7 @@ export default function Home() {
       <section className="max-w-6xl mx-auto px-6 py-10">
         <div className="border border-gray-200 rounded-2xl p-8 text-center bg-white">
           <h3 className="text-lg font-semibold text-gray-900">
-            Why Use Our ROI Calculator?
+            Mengapa Menggunakan Kalkulator ROI Kami?
           </h3>
           <div className="w-20 h-1 bg-indigo-500 mt-3 mx-auto rounded-full"></div>
 
@@ -123,11 +121,10 @@ export default function Home() {
                 <Target className="w-6 h-6 text-green-600" />
               </div>
               <h4 className="font-semibold text-gray-900">
-                Accurate Calculations
+                Perhitungan yang Akurat
               </h4>
               <p className="text-sm text-gray-500 mt-2 max-w-xs">
-                Precise ROI calculations based on real market data and
-                comprehensive financial modeling.
+                Hitung ROI secara presisi dengan menggunakan data pasar terkini dan model keuangan yang menyeluruh.
               </p>
             </div>
 
@@ -135,10 +132,10 @@ export default function Home() {
               <div className="bg-indigo-100 p-4 rounded-full mb-3">
                 <BarChart3 className="w-6 h-6 text-indigo-600" />
               </div>
-              <h4 className="font-semibold text-gray-900">Visual Analytics</h4>
+              <h4 className="font-semibold text-gray-900">Analisis Visual</h4>
               <p className="text-sm text-gray-500 mt-2 max-w-xs">
-                Interactive charts and dashboards to visualize your investment
-                performance over time.
+                Visualisasikan perkembangan investasi Anda dari waktu ke waktu melalui grafik interaktif
+                dan dasbor yang informatif.
               </p>
             </div>
 

@@ -4,11 +4,10 @@ import { Home, Calculator, TrendingUp } from "lucide-react";
 export default function Navbar() {
   const navLinkClass = ({ isActive }) =>
     `flex items-center gap-1 px-3 py-1 rounded-md text-sm font-medium transition
-     ${
-       isActive
-         ? "bg-black text-white"
-         : "text-gray-600 hover:text-black hover:bg-gray-200"
-     }`;
+     ${isActive
+      ? "bg-black text-white"
+      : "text-gray-600 hover:text-black hover:bg-gray-200"
+    }`;
 
   return (
     <nav className="border-t border-b border-gray-300 bg-white shadow-sm">
@@ -30,11 +29,11 @@ export default function Navbar() {
 
         <div className="flex space-x-3">
           <NavLink to="/" className={navLinkClass}>
-            <Home className="w-4 h-4" /> Home
+            <Home className="w-4 h-4" /> Beranda
           </NavLink>
 
           <NavLink to="/kalkulator" className={navLinkClass}>
-            <Calculator className="w-4 h-4" /> Calculator
+            <Calculator className="w-4 h-4" /> Kalkulator
           </NavLink>
         </div>
       </div>
