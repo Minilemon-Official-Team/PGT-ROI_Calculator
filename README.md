@@ -13,6 +13,14 @@ Dengan antarmuka sederhana dan hasil perhitungan instan, aplikasi ini cocok untu
 🎓 Mahasiswa yang belajar kewirausahaan  
 💼 Individu yang ingin memahami dasar proyeksi finansial usaha  
 
+## Fitur
+
+- Hitung total pengeluaran dan pemasukan
+- Analisis profit margin (untung/rugi)
+- Tracking arus kas harian/bulanan
+- Visualisasi grafik profit-loss
+- Export laporan keuangan sederhana
+
 ---
 
 ## Prerequisites  
