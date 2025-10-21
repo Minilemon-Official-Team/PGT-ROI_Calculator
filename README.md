@@ -1,6 +1,6 @@
 # 🧮 ML-ROI Calculator for Business Preparation
 
-Repository ini berisikan project files yang digunakan dalam pembuatan aplikasi **ML-ROI Calculator**
+Repository ini berisikan project files yang digunakan dalam pembuatan aplikasi **ML-ROI Calculator for Business Preparation**
 
 ---
 
@@ -17,7 +17,7 @@ Dengan antarmuka sederhana dan hasil perhitungan instan, aplikasi ini cocok untu
 
 - Hitung total pengeluaran dan pemasukan
 - Analisis profit margin (untung/rugi)
-- Tracking arus kas harian/bulanan
+- Tracking arus kas bulanan
 - Visualisasi grafik profit-loss
 - Export laporan keuangan sederhana
 
@@ -37,14 +37,14 @@ Dengan antarmuka sederhana dan hasil perhitungan instan, aplikasi ini cocok untu
 
    ```bash
    # Contoh
-   git clone https://github.com/<username-anda>/ml-roi-calculator.git
+   git clone https://github.com/Minilemon-Official-Team/PGT-ROI_Calculator
    ```
 
    > Link repository Anda dapat dilihat dengan menekan tombol **Code** berwarna hijau di halaman fork Anda, lalu salin URL HTTPS yang disediakan.
 
 3. Masuk ke folder repository:  
    ```bash
-   cd ml-roi-calculator
+   cd PGT-ROI_Calculator
    ```
 
 4. Install dependencies untuk frontend dan backend:  
@@ -140,4 +140,4 @@ Kami menyambut siapa pun yang ingin ikut berpartisipasi — baik dalam **pengemb
 ## License  
 
 Proyek ini dirilis di bawah lisensi **MIT License**.  
-Anda bebas menggunakan dan memodifikasi proyek ini dengan tetap mencantumkan kredit kepada **Mini Lemon - Playground Team**.  
+Anda bebas menggunakan dan memodifikasi proyek ini dengan tetap mencantumkan kredit kepada **Minilemon - Playground Team**.  
