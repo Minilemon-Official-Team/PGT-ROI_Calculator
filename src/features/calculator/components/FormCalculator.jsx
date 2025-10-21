@@ -15,15 +15,15 @@ function FormCalculator({ totalProgress }) {
     const dataFinancial = [
         {
             "id": "initial_investment",
-            "title": "Initial Investment (Rp)"
+            "title": "Modal Awal (Rp)"
         },
         {
             "id": "monthly_revenue",
-            "title": "Expected Monthly Revenue (Rp)"
+            "title": "Pendapatan Bulanan (Rp)"
         },
         {
             "id": "operating_costs",
-            "title": "Monthly Operating Costs (Rp)"
+            "title": "Biaya Operasional Bulanan (Rp)"
         }
     ];
 
@@ -81,9 +81,9 @@ function FormCalculator({ totalProgress }) {
                 <section className="mb-4 px-8 py-4 rounded-2xl border border-gray-300 shadow">
                     <div className='flex flex-row gap-2'>
                         <Building />
-                        <h2 className='font-semibold'>Equipment</h2>
+                        <h2 className='font-semibold'>Peralatan</h2>
                     </div>
-                    <p className="mt-4">Select Equipment Types</p>
+                    <p className="mt-4">Pilih Jenis Peralatan</p>
                     <div className="flex flex-col">
                         {
                             dataEquipment.map((item, index) => (
@@ -113,7 +113,7 @@ function FormCalculator({ totalProgress }) {
                     <div className="px-8 py-8 rounded-2xl border border-gray-300 shadow">
                         <div className='flex flex-row gap-2'>
                             <DollarSign />
-                            <h2 className='font-semibold'>Financial Details</h2>
+                            <h2 className='font-semibold'>Rincian Keuangan</h2>
                         </div>
                         <div className="mt-4">
                             {
@@ -133,7 +133,7 @@ function FormCalculator({ totalProgress }) {
                                     </div>
                                 ))
                             }
-                            <label htmlFor="" className="block font-semibold mt-4">Timeframe (months): {form.time_frame}</label>
+                            <label htmlFor="" className="block font-semibold mt-4">Jangka Waktu (Bulan): {form.time_frame}</label>
                             <div className='relative w-full h-4 bg-gray-200 rounded-full'>
                                 <div
                                     className='absolute h-4 bg-black rounded-full'
@@ -154,11 +154,11 @@ function FormCalculator({ totalProgress }) {
                     <div className="px-8 py-4 rounded-2xl border border-gray-300 shadow">
                         <div className='flex flex-row gap-2'>
                             <TrendingUp />
-                            <h2 className='font-semibold'>Business Strategy</h2>
+                            <h2 className='font-semibold'>Strategi Bisnis</h2>
                         </div>
                         <DropDown
                             data={dataFunding}
-                            title={"Funding Options"}
+                            title={"Pilihan Pendanaan"}
                             value={form.funding}
                             onChange={(e) => setForm(prev => ({ ...prev, funding: e }))}
                             name={"funding-options"}
@@ -166,11 +166,11 @@ function FormCalculator({ totalProgress }) {
                         />
                         <DropDown
                             data={dataBM}
-                            title={"Business Model"}
+                            title={"Model Bisnis"}
                             value={form.business_model}
                             onChange={(e) => setForm(prev => ({ ...prev, business_model: e }))}
                             name={"business-model"}
-                            placeholder={"Select business model"}
+                            placeholder={"Pilih model bisnis"}
                         />
                     </div>
                 </section>
@@ -179,8 +179,9 @@ function FormCalculator({ totalProgress }) {
                         className={[
                             'w-full py-3 text-white rounded transition-colors',
                             progress === 6 ? 'bg-black hover:bg-black/50 cursor-pointer' : 'bg-gray-500 text-white/70'
-                        ].join(" ")}>Calculate ROI</button>
-                    <p className='text-center text-black/60 mt-4'>Complete more fields to calculate ROI</p>
+                        ].join(" ")}>Hitung ROI</button>
+                    {progress !== 6 ? <p className='text-center text-black/60 mt-4'>Lengkapi beberapa kolom lagi untuk menghitung ROI.</p> : <span></span>}
+
                 </section>
             </form>
         </div>

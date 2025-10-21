@@ -28,11 +28,13 @@ function CalculatorPage() {
         <div className="flex flex-col justify-center py-4">
             <div className="w-sm md:w-4xl m-auto px-8 py-4 rounded-2xl border border-gray-300 shadow">
                 <div className="flex flex-row gap-2">
-                    <Calculator /> <h2>ROI Calculator</h2>
+                    <Calculator /> <h2>ROI Kalkulator</h2>
                 </div>
-                <p className="text-black/60 mt-2">Calculate return on investment for your business venture across different NYC boroughs</p>
+                <p className="text-black/60 mt-2">
+                    Hitung persentase pengembalian investasi (ROI) bisnis Anda
+                </p>
                 <label htmlFor="" className="flex flex-row justify-between mt-2">
-                    <span>Form Completion</span>
+                    <span>Pengisian Formulir</span>
                     <span>{percentageProgress}</span>
                 </label>
                 <div className="progress-bar-container mt-2" style={styles.container}>
