@@ -1,6 +1,6 @@
 # 🧮 ML-ROI Calculator  
 
-Repository ini berisikan project files yang digunakan dalam pembuatan aplikasi **ML-ROI Calculator**, sebuah alat bantu berbasis web yang membantu pelaku **UMKM** dan calon pengusaha memproyeksikan potensi laba atas investasi (*Return on Investment* / ROI) dengan mudah dan gratis.  
+Repository ini berisikan project files yang digunakan dalam pembuatan aplikasi **ML-ROI Calculator**
 
 ---
 
@@ -9,9 +9,9 @@ Repository ini berisikan project files yang digunakan dalam pembuatan aplikasi *
 **ML-ROI Calculator** adalah alat bantu berbasis web yang dirancang untuk membantu pelaku **UMKM di Indonesia** memproyeksikan potensi laba atas investasi (*Return on Investment*).  
 Dengan antarmuka sederhana dan hasil perhitungan instan, aplikasi ini cocok untuk:  
 
-- 🏪 Pengusaha pemula  
-- 🎓 Mahasiswa yang belajar kewirausahaan  
-- 💼 Individu yang ingin memahami dasar proyeksi finansial usaha  
+🏪 Pengusaha pemula  
+🎓 Mahasiswa yang belajar kewirausahaan  
+💼 Individu yang ingin memahami dasar proyeksi finansial usaha  
 
 ---
 
@@ -132,4 +132,4 @@ Kami menyambut siapa pun yang ingin ikut berpartisipasi — baik dalam **pengemb
 ## License  
 
 Proyek ini dirilis di bawah lisensi **MIT License**.  
-Anda bebas menggunakan dan memodifikasi proyek ini dengan tetap mencantumkan kredit kepada **Playground Team**.  
+Anda bebas menggunakan dan memodifikasi proyek ini dengan tetap mencantumkan kredit kepada **Mini Lemon - Playground Team**.  
