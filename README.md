@@ -1,4 +1,4 @@
-# 🧮 ML-ROI Calculator  
+# 🧮 ML-ROI Calculator for Business Preparation
 
 Repository ini berisikan project files yang digunakan dalam pembuatan aplikasi **ML-ROI Calculator**
 
