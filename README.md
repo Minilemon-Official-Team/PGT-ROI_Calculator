@@ -126,8 +126,7 @@ ml-roi-calculator/
 
 ## 🧑‍💻 Kontributor  
 
-Proyek ini dikembangkan oleh **Playground Team** bersama kontributor komunitas.  
-Kami menyambut siapa pun yang ingin ikut berpartisipasi — baik dalam **pengembangan, desain, riset, maupun dokumentasi**.  
+Proyek ini dikembangkan oleh **Minilemon Playground Team** dan kami menyambut siapa pun yang ingin ikut berpartisipasi — baik dalam **pengembangan, desain, riset, maupun dokumentasi**.  
 
 ---
 
