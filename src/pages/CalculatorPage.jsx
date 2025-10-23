@@ -1,4 +1,4 @@
-import FormCalculator from "../components/FormCalculator";
+import FormCalculator from "../features/calculator/components/FormCalculator";
 import { Calculator } from 'lucide-react';
 import { useState } from 'react';
 
