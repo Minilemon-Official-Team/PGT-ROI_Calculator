@@ -11,8 +11,8 @@ function DropDown({ data, title, name, onChange, value, placeholder }) {
                     </Label>
                     <Listbox name={name} value={value} onChange={onChange}>
                         <ListboxButton className="w-11/12 h-9 mt-2 text-start px-4 rounded bg-gray-100 focus:outline-gray-400">
-                            {value ? (
-                                <span>{value}</span>
+                            {value?.label ? (
+                                <span>{value.label}</span>
                             ) : (
                                 <div className='flex flex-row justify-between'>
                                     <span className='text-gray-400'>{placeholder}</span>
@@ -21,12 +21,12 @@ function DropDown({ data, title, name, onChange, value, placeholder }) {
                             )}
                         </ListboxButton>
                         <ListboxOptions anchor="bottom" className="mt-4 w-96 rounded bg-white border border-gray-300 focus:outline-none">
-                            {data.map((item, index) => (
+                            {data.map((item) => (
                                 <ListboxOption
-                                    key={index}
+                                    key={item.id}
                                     value={item}
                                     className="mt-2 mx-2 mb-2 px-4 py-2 hover:bg-gray-100 rounded cursor-pointer">
-                                    {item}
+                                    {item.label}
                                 </ListboxOption>
                             ))}
                         </ListboxOptions>
