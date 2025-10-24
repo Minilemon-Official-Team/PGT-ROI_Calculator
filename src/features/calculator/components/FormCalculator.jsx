@@ -6,7 +6,12 @@ import { Building, DollarSign, TrendingUp } from 'lucide-react';
 
 import { DATA_EQUIPMENT, DATA_FINANCIAL, DATA_FUNDING, DATA_BM } from '../constants/'
 
+import { useContext } from 'react';
+import { NavStateContext } from '../../../shared/contexts';
+
 function FormCalculator({ totalProgress }) {
+
+    const navState = useContext(NavStateContext);
 
     const [form, setForm] = useState({
         equipment: [],
@@ -53,9 +58,14 @@ function FormCalculator({ totalProgress }) {
         totalProgress(progress)
     }, [progress, totalProgress])
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        navState.setFormCalculated(true);
+    }
+
     return (
         <div className='m-auto'>
-            <form className="w-sm md:w-4xl mt-4 flex flex-col">
+            <form className="w-sm md:w-4xl mt-4 flex flex-col" onSubmit={handleSubmit}>
                 <section className="mb-4 px-8 py-4 rounded-2xl border border-gray-300 shadow">
                     <div className='flex flex-row gap-2'>
                         <Building />

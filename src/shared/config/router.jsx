@@ -5,6 +5,7 @@ import RootLayout from "../components/layouts/RootLayout";
 // pages
 import Home from "../../pages/";
 import CalculatorPage from "../../pages/CalculatorPage";
+import ResultsPage from "../../pages/ResultsPage";
 
 export const router = createBrowserRouter([
     {
@@ -18,6 +19,10 @@ export const router = createBrowserRouter([
             {
                 path: '/kalkulator',
                 element: <CalculatorPage />
+            },
+            {
+                path: '/hasil',
+                element: <ResultsPage />
             }
         ]
     }
