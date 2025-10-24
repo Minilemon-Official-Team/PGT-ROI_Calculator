@@ -35,6 +35,10 @@ export default function Navbar() {
           <NavLink to="/kalkulator" className={navLinkClass}>
             <Calculator className="w-4 h-4" /> Kalkulator
           </NavLink>
+
+          <NavLink to="/hasil" className={navLinkClass}>
+            <Calculator className="w-4 h-4" /> Hasil
+          </NavLink>
         </div>
       </div>
     </nav>
