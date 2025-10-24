@@ -4,9 +4,18 @@ import CashFlowCard from '../features/results/components/CashFlowCard';
 import InvestmentDetailsCard from '../features/results/components/InvestmentDetailsCard';
 import KeyInsightCard from '../features/results/components/KeyInsightCard';
 import { TrendingUp } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
+
+import { useContext } from 'react';
+import { NavStateContext } from '../shared/contexts';
 
 function ResultsPage() {
+
+    const navState = useContext(NavStateContext);
+
+    if (!navState.formCalculated) {
+        return <Navigate to={"/kalkulator"} replace />
+    }
 
     return (
         <>

@@ -9,7 +9,7 @@ function CalculatorPage() {
     const percentageProgress = `${Math.round((progress / 6) * 100)}`
 
     return (
-        <section className="flex flex-col py-4">
+        <section className="flex flex-col py-8">
             <div className="w-sm md:w-4xl m-auto px-8 py-4 rounded-2xl border border-gray-300 shadow">
                 <div className="flex flex-row gap-2">
                     <Calculator /> <h2>ROI Kalkulator</h2>

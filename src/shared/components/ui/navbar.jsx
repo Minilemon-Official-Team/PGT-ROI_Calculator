@@ -1,7 +1,11 @@
 import { NavLink } from "react-router-dom";
 import { Home, Calculator, TrendingUp } from "lucide-react";
+import { useContext } from "react";
+import { NavStateContext } from "../../contexts";
 
 export default function Navbar() {
+  const navState = useContext(NavStateContext);
+
   const navLinkClass = ({ isActive }) =>
     `flex items-center gap-1 px-3 py-1 rounded-md text-sm font-medium transition
      ${isActive
@@ -10,8 +14,8 @@ export default function Navbar() {
     }`;
 
   return (
-    <nav className="border-t border-b border-gray-300 bg-white shadow-sm">
-      <div className="container mx-auto flex items-center justify-between p-4">
+    <nav className="fixed z-50 w-full border-t border-b border-gray-300 bg-white shadow-sm">
+      <div className="container mx-auto flex flex-col gap-4 md:gap-0 md:flex-row items-center justify-between p-4">
         <div className="flex items-center space-x-2">
           <div className="bg-black rounded-full p-2">
             <TrendingUp className="w-5 h-5 text-white" />
@@ -35,10 +39,12 @@ export default function Navbar() {
           <NavLink to="/kalkulator" className={navLinkClass}>
             <Calculator className="w-4 h-4" /> Kalkulator
           </NavLink>
+          {
+            navState.formCalculated ? <NavLink to="/hasil" className={navLinkClass}>
+              <Calculator className="w-4 h-4" /> Hasil
+            </NavLink> : null
+          }
 
-          <NavLink to="/hasil" className={navLinkClass}>
-            <Calculator className="w-4 h-4" /> Hasil
-          </NavLink>
         </div>
       </div>
     </nav>
