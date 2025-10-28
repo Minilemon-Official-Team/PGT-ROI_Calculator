@@ -28,19 +28,17 @@ function ResultsPage() {
                 <InvestmentDetailsCard />
                 <section className='mt-4 border border-gray-300 rounded-2xl p-8'>
                     <header>Key Insights</header>
-                    <div className='grid md:grid-cols-2 gap-4'>
-                        <KeyInsightCard />
-                    </div>
+                    <KeyInsightCard />
                 </section>
                 <section className='grid md:grid-cols-2 gap-4 mt-8'>
                     <button
                         className=
                         'flex flex-row justify-center gap-2 py-2 text-white rounded-2xl transition-colors bg-black hover:bg-black/50 cursor-pointer'
-                    ><TrendingUp /> <Link to={'/hasil'}>View Detailed Dashboard</Link></button>
+                    ><TrendingUp /> <Link to={'/hasil'}>Lihat Dashboard Terperinci</Link></button>
                     <button
                         className=
                         'w-full py-2 text-black rounded-2xl transition-colors bg-white border border-gray-300 hover:bg-black/10 cursor-pointer'
-                    ><Link to={'/kalkulator'}>Recalculate with Different Parameters</Link></button>
+                    ><Link to={'/kalkulator'}>Hitung ulang dengan parameter yang berbeda</Link></button>
                 </section>
             </section>
         </>

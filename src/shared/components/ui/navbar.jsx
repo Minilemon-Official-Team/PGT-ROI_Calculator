@@ -36,9 +36,6 @@ export default function Navbar() {
             <Home className="w-4 h-4" /> Beranda
           </NavLink>
 
-          <NavLink to="/kalkulator" className={navLinkClass}>
-            <Calculator className="w-4 h-4" /> Kalkulator
-          </NavLink>
           {
             navState.formCalculated ? <NavLink to="/hasil" className={navLinkClass}>
               <Calculator className="w-4 h-4" /> Hasil

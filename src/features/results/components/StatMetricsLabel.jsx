@@ -5,7 +5,7 @@ function StatMetricsLabel({ title, subTitle, value, pill, icon, colorText }) {
                 {icon} <span>{title}</span>
             </h3>
             <span className="text-4xl font-semibold" style={{ color: `${colorText}` }}>{value}</span>
-            <span className={`${pill ? 'bg-gray-200 font-semibold' : ''} px-4 py-1 rounded-full text-sm`}>{subTitle}</span>
+            <span className={`${pill ? 'bg-gray-200 font-semibold' : ''} px-4 py-1 rounded-full text-sm text-center`}>{subTitle}</span>
         </div>
     )
 }
