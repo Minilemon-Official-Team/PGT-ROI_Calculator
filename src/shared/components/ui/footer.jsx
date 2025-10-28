@@ -11,9 +11,6 @@ export default function Footer() {
 
         <div className="mt-3 flex flex-wrap justify-center gap-2">
           <span className="px-3 py-1 bg-white border border-gray-200 rounded-full text-xs text-gray-700 shadow-sm">
-            NYC Borough Analysis
-          </span>
-          <span className="px-3 py-1 bg-white border border-gray-200 rounded-full text-xs text-gray-700 shadow-sm">
             Perbandingan Model Bisnis
           </span>
           <span className="px-3 py-1 bg-white border border-gray-200 rounded-full text-xs text-gray-700 shadow-sm">

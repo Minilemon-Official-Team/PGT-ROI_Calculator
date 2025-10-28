@@ -3,7 +3,7 @@ import { Field, Input, Label } from '@headlessui/react';
 function InputNumber({ title, name, value, onChange }) {
     return (
         <>
-            <Field>
+            <Field className="mt-4">
                 <Label>{title}</Label>
                 <Input
                     type='number'

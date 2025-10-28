@@ -5,22 +5,22 @@ function CashFlowCard() {
     const percentageProgress = Math.round((5000000 / 8000000) * 100)
     return (
         <div className='border border-gray-300 p-8 rounded-2xl mt-4'>
-            <header>Monthly Cash Flow</header>
+            <header>Arus Kas Bulanan</header>
             <KeyValueLabel
-                title={"Monthly Revenue"}
+                title={"Pendapatan Bulanan"}
                 value={"Rp8.000"}
                 colorText={"#00A63E"}
                 isHeader={false}
             />
             <KeyValueLabel
-                title={"Monthly Operating Costs"}
+                title={"Biaya Operasional Bulanan"}
                 value={"Rp3.000"}
                 colorText={"#F54900"}
                 isHeader={false}
             />
             <hr className='text-gray-400 mt-4' />
             <KeyValueLabel
-                title={"Monthly Profit"}
+                title={"Laba Bulanan"}
                 value={"Rp5.000"}
                 colorText={"#155DFC"}
                 isHeader={true}

@@ -72,37 +72,19 @@ export default function Home() {
               </div>
             </div>
           </div>
-
-          <div className="border border-gray-200 rounded-2xl p-6 bg-white shadow-sm hover:shadow-md transition">
-            <div className="flex items-start gap-3">
-              <div className="bg-gray-200 p-3 rounded-xl inline-flex items-center justify-center">
-                <MapPin className="w-6 h-6 text-purple-500" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-900 text-sm">
-                  Location Analysis
-                </h3>
-                <p className="text-sm text-gray-500 mt-1 leading-relaxed max-w-xl">
-                  Compare ROI across all NYC boroughs with market insights and
-                  regional performance data.
-                </p>
-              </div>
+        </div>
+        <div className="mt-8 border border-gray-200 rounded-2xl p-6 bg-white shadow-sm hover:shadow-md transition">
+          <div className="flex items-start gap-3">
+            <div className="bg-gray-200 p-3 rounded-xl inline-flex items-center justify-center">
+              <Briefcase className="w-6 h-6 text-orange-500" />
             </div>
-          </div>
-
-          <div className="border border-gray-200 rounded-2xl p-6 bg-white shadow-sm hover:shadow-md transition">
-            <div className="flex items-start gap-3">
-              <div className="bg-gray-200 p-3 rounded-xl inline-flex items-center justify-center">
-                <Briefcase className="w-6 h-6 text-orange-500" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-900 text-sm">
-                  Model Bisnis
-                </h3>
-                <p className="text-sm text-gray-500 mt-1 leading-relaxed max-w-xl">
-                  Pelajari beragam model bisnis dan alternatif pendanaan guna memaksimalkan strategi investasi Anda.
-                </p>
-              </div>
+            <div>
+              <h3 className="font-semibold text-gray-900 text-sm">
+                Model Bisnis
+              </h3>
+              <p className="text-sm text-gray-500 mt-1 leading-relaxed max-w-xl">
+                Pelajari beragam model bisnis dan alternatif pendanaan guna memaksimalkan strategi investasi Anda.
+              </p>
             </div>
           </div>
         </div>
@@ -143,10 +125,10 @@ export default function Home() {
               <div className="bg-purple-100 p-4 rounded-full mb-3">
                 <Users className="w-6 h-6 text-purple-600" />
               </div>
-              <h4 className="font-semibold text-gray-900">Market Insights</h4>
+              <h4 className="font-semibold text-gray-900">Perencanaan Strategis</h4>
               <p className="text-sm text-gray-500 mt-2 max-w-xs">
-                Compare across NYC boroughs and business models to find the best
-                opportunities.
+                Uji berbagai skenario investasi dengan mengubah variabel kunci. Pahami bagaimana biaya,
+                pendapatan, dan jangka waktu memengaruhi hasil Anda untuk membuat keputusan yang lebih cerdas.
               </p>
             </div>
           </div>
