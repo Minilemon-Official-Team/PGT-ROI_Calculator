@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { Home, Calculator, TrendingUp } from "lucide-react";
+import { Home, Calculator, TrendingUp, ChartColumn } from "lucide-react";
 import { useContext } from "react";
 import { NavStateContext } from "../../contexts";
 
@@ -37,9 +37,16 @@ export default function Navbar() {
           </NavLink>
 
           {
-            navState.formCalculated ? <NavLink to="/hasil" className={navLinkClass}>
-              <Calculator className="w-4 h-4" /> Hasil
-            </NavLink> : null
+            navState.formCalculated && (
+              <>
+                <NavLink to="/hasil" className={navLinkClass}>
+                  <Calculator className="w-4 h-4" /> Hasil
+                </NavLink>
+                <NavLink to="/dashboard" className={navLinkClass}>
+                  <ChartColumn className="w-4 h-4" /> Dashboard
+                </NavLink>
+              </>
+            )
           }
 
         </div>

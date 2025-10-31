@@ -1,3 +1,4 @@
+import ItemPill from '../../../shared/components/ui/ItemPill';
 import DetailItem from './DetailItem';
 
 import { Calendar, DollarSign, Building } from 'lucide-react';
@@ -26,9 +27,9 @@ function InvestmentDetailsCard() {
                 <div className='mt-8'>
                     <span>Peralatan Terpilih:</span>
                     <div className='grid grid-cols-2 md:grid-cols-4'>
-                        <p
-                            className='px-2 md:px-4 bg-gray-200 border border-white w-fit mt-4 rounded-2xl'
-                        >Industrial Printers</p>
+                        <ItemPill
+                            value={"Industrial Printers"}
+                        />
                     </div>
                 </div>
             </section>

@@ -1,4 +1,4 @@
-function ProgressBar({ title, percentageProgress }) {
+function ProgressBar({ title, percentageProgress, value }) {
 
     const styles = {
         container: {
@@ -18,16 +18,16 @@ function ProgressBar({ title, percentageProgress }) {
     }
 
     return (
-        <>
+        <div>
             <label htmlFor="" className="flex flex-row justify-between mt-2">
                 <span>{title}</span>
-                <span>{percentageProgress}%</span>
+                <span>{value ? `${value}` : `${percentageProgress}%`}</span>
             </label>
             <div className="progress-bar-container mt-2" style={styles.container}>
                 <div className="progress-bar-filler" style={styles.filler}>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 
