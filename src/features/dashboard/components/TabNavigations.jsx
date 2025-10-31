@@ -1,5 +1,6 @@
 import { useState } from "react";
 import PerformanceTab from "./PerformanceTab";
+import FundingModelsTab from "./FundingModelsTab";
 
 function TabNavigations() {
     const [isActive, setIsActive] = useState('performance');
@@ -9,7 +10,7 @@ function TabNavigations() {
             case "performance":
                 return <PerformanceTab />;
             case "funding-models":
-                return <h1>funding models</h1>;
+                return <FundingModelsTab />;
             case "projections":
                 return <h1>projections</h1>;
             default:

@@ -36,3 +36,38 @@ export const data = [
     { "month": 35, "revenue": 54000, "cost": 9200, "profit": 44800 },
     { "month": 36, "revenue": 56000, "cost": 9300, "profit": 46700 }
 ];
+
+export const fundingSources = [
+    { "label": "Self-Funded", "value": 35 },
+    { "label": "Crowdfunding", "value": 5 },
+    { "label": "Government Grant", "value": 10 },
+    { "label": "Investor Funding", "value": 22 },
+    { "label": "Bank Loan", "value": 28 },
+];
+
+export const businessModelPerformance = [
+    {
+        "model": "B2B Manufacturing",
+        "risk": "Medium",
+        "ROI": "165%",
+        "isChosen": false
+    },
+    {
+        "model": "B2C Direct Sales",
+        "risk": "High",
+        "ROI": "142%",
+        "isChosen": true
+    },
+    {
+        "model": "Subscription Service",
+        "risk": "Low",
+        "ROI": "198%",
+        "isChosen": false
+    },
+    {
+        "model": "Franchise Model",
+        "risk": "Medium",
+        "ROI": "134%",
+        "isChosen": false
+    },
+]

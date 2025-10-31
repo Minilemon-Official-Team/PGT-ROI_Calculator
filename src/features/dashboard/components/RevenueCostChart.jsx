@@ -74,6 +74,9 @@ function RevenueCostChart() {
                 position: "bottom",
                 labels: { color: "#333", font: { size: 13 } },
             },
+            datalabels: {
+                display: false
+            },
             title: {
                 display: true,
                 text: "Revenue vs Costs Over Time",
