@@ -1,4 +1,5 @@
 import RevenueCostChart from "./RevenueCostChart";
+import ROITrajectoryChart from "./ROITrajectoryChart";
 import ProgressBar from "../../../shared/components/ui/ProgressBar";
 import ItemPill from "../../../shared/components/ui/ItemPill";
 function PerformanceTab() {
@@ -12,8 +13,8 @@ function PerformanceTab() {
                 <div className="border border-gray-300 rounded-2xl p-8 flex items-center h-[400px]">
                     <RevenueCostChart />
                 </div>
-                <div className="border border-gray-300 rounded-2xl p-8">
-                    test
+                <div className="border border-gray-300 rounded-2xl p-8 flex items-center h-[400px]">
+                    <ROITrajectoryChart />
                 </div>
             </section>
             <section className="border border-gray-300 rounded-2xl p-8 mt-8">
@@ -22,17 +23,17 @@ function PerformanceTab() {
                     <ProgressBar
                         title={"Initial Investment"}
                         percentageProgress={initialInvestmentPercentage}
-                        value={initialInvestment}
+                        value={`Rp${initialInvestment}`}
                     />
                     <ProgressBar
                         title={"Monthly Revenue"}
                         percentageProgress={monthlyPercentage}
-                        value={8000}
+                        value={"Rp8000"}
                     />
                     <ProgressBar
                         title={"Operating Costs"}
                         percentageProgress={operatingCosts}
-                        value={3000}
+                        value={"Rp3000"}
                     />
                 </div>
                 <div className="flex flex-col md:flex-row md:gap-4 mt-4">

@@ -21,7 +21,7 @@ function ProgressBar({ title, percentageProgress, value }) {
         <div>
             <label htmlFor="" className="flex flex-row justify-between mt-2">
                 <span>{title}</span>
-                <span>{value ? `Rp${value}` : `${percentageProgress}%`}</span>
+                <span>{value ? `${value}` : `${percentageProgress}%`}</span>
             </label>
             <div className="progress-bar-container mt-2" style={styles.container}>
                 <div className="progress-bar-filler" style={styles.filler}>

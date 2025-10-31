@@ -1,6 +1,7 @@
 import { useState } from "react";
 import PerformanceTab from "./PerformanceTab";
 import FundingModelsTab from "./FundingModelsTab";
+import ProjectionsTab from "./ProjectionsTab";
 
 function TabNavigations() {
     const [isActive, setIsActive] = useState('performance');
@@ -12,7 +13,7 @@ function TabNavigations() {
             case "funding-models":
                 return <FundingModelsTab />;
             case "projections":
-                return <h1>projections</h1>;
+                return <ProjectionsTab />;
             default:
                 return <h1>performance</h1>
         }
@@ -34,9 +35,11 @@ function TabNavigations() {
                         onClick={() => setIsActive("funding-models")}
                         className={[
                             isActive === "funding-models" ? "bg-white rounded-xl font-bold" : "",
-                            "h-full flex items-center justify-center text-sm"
+                            "h-full flex items-center justify-center text-sm text-center"
                         ].join(" ")}
-                    >Funding & Models
+                    >
+                        <span className="block sm:hidden">Funding</span>
+                        <span className="hidden sm:block">Funding & Models</span>
                     </li>
                     <li
                         onClick={() => setIsActive("projections")}
