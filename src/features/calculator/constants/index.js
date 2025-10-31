@@ -25,24 +25,20 @@ export const DATA_FINANCIAL = [
 export const DATA_FUNDING = [
     {
         id: 1,
-        label: 'Self Funded'
+        label: 'Dana Pribadi'
     },
     {
         id: 2,
-        label: 'Bank Loan'
+        label: 'Pinjaman Bank'
     },
     {
         id: 3,
-        label: 'Investor Funding'
+        label: 'Pendanaan Investor'
     },
     {
         id: 4,
-        label: 'Goverment Grant'
-    },
-    {
-        id: 5,
-        label: 'CrowdFunding'
-    },
+        label: 'Hibah Pemerintah'
+    }
 ];
 
 export const DATA_BM = [
