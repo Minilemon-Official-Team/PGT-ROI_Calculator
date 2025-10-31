@@ -6,6 +6,7 @@ import RootLayout from "../components/layouts/RootLayout";
 import Home from "../../pages/";
 import CalculatorPage from "../../pages/CalculatorPage";
 import ResultsPage from "../../pages/ResultsPage";
+import DashboardPage from "../../pages/DashboardPage";
 
 export const router = createBrowserRouter([
     {
@@ -23,6 +24,10 @@ export const router = createBrowserRouter([
             {
                 path: '/hasil',
                 element: <ResultsPage />
+            },
+            {
+                path: '/dashboard',
+                element: <DashboardPage />
             }
         ]
     }
