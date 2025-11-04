@@ -31,6 +31,34 @@ function FormCalculator({ totalProgress }) {
   const [progress, setProgress] = useState(0);
   const [loading, setLoading] = useState(false);
 
+  // **PERBAIKAN: Mapping yang sesuai dengan database**
+  const getEquipmentId = (equipmentName) => {
+    const equipmentMap = {
+      "Peralatan Produksi": 1,
+      "Peralatan Pengemasan": 2,
+      "Peralatan Kontrol Kualitas": 3,
+      "Peralatan Otomatis": 4,
+      "Peralatan Penyimpanan": 5,
+      "Kendataan Operasional": 6,
+    };
+    return equipmentMap[equipmentName];
+  };
+
+  // **PERBAIKAN: Jika DATA_EQUIPMENT berupa array of objects**
+  const getEquipmentOptions = () => {
+    // Jika DATA_EQUIPMENT sudah berupa array of objects
+    if (DATA_EQUIPMENT[0] && typeof DATA_EQUIPMENT[0] === "object") {
+      return DATA_EQUIPMENT;
+    }
+    // Jika masih array of strings, convert ke array of objects
+    return DATA_EQUIPMENT.map((item, index) => ({
+      id: index + 1,
+      label: item,
+    }));
+  };
+
+  const equipmentOptions = getEquipmentOptions();
+
   const updateProgress = (form) => {
     let count = 0;
 
@@ -80,20 +108,27 @@ function FormCalculator({ totalProgress }) {
     setLoading(true);
 
     try {
+      // **PERBAIKAN: Map equipment names ke IDs database yang benar**
       const payload = {
         financial_details: {
-          initial_investment: form.initial_investment,
-          expected_monthly_revenue: form.monthly_revenue,
-          monthly_operating_cost: form.operating_costs,
-          timeframe: form.time_frame,
+          initial_investment: parseInt(form.initial_investment),
+          expected_monthly_revenue: parseInt(form.monthly_revenue),
+          monthly_operating_cost: parseInt(form.operating_costs),
+          timeframe: parseInt(form.time_frame),
         },
         business_strategy: {
           funding_option: form.funding?.label || form.funding,
           business_model: form.business_model?.label || form.business_model,
         },
-        // mapping ID equipment (sementara urutan 1,2,3,...)
-        equipments: form.equipment.map((_, idx) => idx + 1),
+        // **PERBAIKAN: Gunakan mapping function yang benar**
+        equipments: form.equipment
+          .map((equipmentName) => getEquipmentId(equipmentName))
+          .filter((id) => id !== undefined), // Filter out undefined IDs
       };
+
+      console.log("Final payload to backend:", payload);
+      console.log("Selected equipment names:", form.equipment);
+      console.log("Mapped equipment IDs:", payload.equipments);
 
       const response = await axios.post(
         "http://localhost:3000/api/calculate-roi",
@@ -103,7 +138,7 @@ function FormCalculator({ totalProgress }) {
       if (response.status === 201) {
         console.log("ROI Calculation Result:", response.data);
 
-        // Simpan ke context biar halaman hasil bisa akses
+        // Simpan ke context
         navState.setRoiResult(response.data.data);
         navState.setFormCalculated(true);
 
@@ -111,7 +146,10 @@ function FormCalculator({ totalProgress }) {
       }
     } catch (error) {
       console.error("Error calculating ROI:", error);
-      alert("Terjadi kesalahan saat menghitung ROI. Silakan coba lagi.");
+      console.error("Error response:", error.response?.data);
+      alert(
+        `Terjadi kesalahan: ${error.response?.data?.message || error.message}`
+      );
     } finally {
       setLoading(false);
     }
@@ -131,22 +169,27 @@ function FormCalculator({ totalProgress }) {
           </div>
           <p className="mt-4">Pilih Jenis Peralatan</p>
           <div className="flex flex-col">
-            {DATA_EQUIPMENT.map((item, index) => (
+            {equipmentOptions.map((item, index) => (
               <CheckBox
-                key={index}
-                value={item}
+                key={item.id || index}
+                value={item.label || item}
                 onChange={handleCheckboxToggle}
               />
             ))}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">
               {form.equipment?.map((item, index) => (
                 <span
                   key={index}
-                  className="flex justify-center items-center text-center bg-gray-200 rounded me-2"
+                  className="flex justify-center items-center text-center bg-gray-200 rounded px-3 py-1 text-sm"
                 >
                   {item}
                 </span>
               ))}
+              {form.equipment.length === 0 && (
+                <span className="text-gray-500 text-sm">
+                  Belum ada peralatan dipilih
+                </span>
+              )}
             </div>
           </div>
         </section>
