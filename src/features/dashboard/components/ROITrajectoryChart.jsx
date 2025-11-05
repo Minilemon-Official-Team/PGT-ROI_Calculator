@@ -10,6 +10,8 @@ defaults.plugins.title.font.size = 16;
 defaults.plugins.title.color = "black";
 
 function ROITrajectoryChart({ data }) {
+    console.log("data roi trajectory:", data);
+
     const chartData = {
         labels: data.slice(0, 24).map((item) => item.month),
         datasets: [

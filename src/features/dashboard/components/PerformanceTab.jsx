@@ -9,16 +9,16 @@ function PerformanceTab({ data }) {
   const monthlyPercentage = (8000 / initialInvestment) * 100;
   const operatingCosts = (3000 / initialInvestment) * 100;
 
-  const { chartData } = data;
+  const { monthlyProjection, projectionsData } = data;
 
   return (
     <div className="flex flex-col">
       <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="border border-gray-300 rounded-2xl p-8 flex items-center h-[400px]">
-          <RevenueCostChart data={chartData} />
+          <RevenueCostChart data={monthlyProjection} />
         </div>
         <div className="border border-gray-300 rounded-2xl p-8 flex items-center h-[400px]">
-          <ROITrajectoryChart data={chartData} />
+          <ROITrajectoryChart data={projectionsData.monthlyProjections} />
         </div>
       </section>
       <section className="border border-gray-300 rounded-2xl p-8 mt-8">
