@@ -10,7 +10,6 @@ defaults.plugins.title.font.size = 16;
 defaults.plugins.title.color = "black";
 
 function RevenueCostChart({ data }) {
-    console.log("data revenuecost:", data);
     const chartData = {
         labels: data.slice(0, 24).map((item) => item.month),
         datasets: [

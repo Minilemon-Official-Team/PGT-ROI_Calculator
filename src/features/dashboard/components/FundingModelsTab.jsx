@@ -3,7 +3,12 @@ import BusinessPerformanceCard from "./BusinessPerformanceCard";
 
 import { businessModelPerformance } from "../constants/data";
 
-function FundingModelsTab() {
+function FundingModelsTab({ data }) {
+
+  const { metrics, projectionsData, formatRupiah } = data;
+
+  const initialInvestment = projectionsData?.initialInvestment || 0;
+
   return (
     <div className="flex flex-col">
       <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -31,11 +36,11 @@ function FundingModelsTab() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
           <div className="flex flex-col gap-2">
             <h3 className="font-semibold">Selected Funding: Self-Funded</h3>
-            <span className="text-gray-600">Initial Investment: Rp50,000</span>
+            <span className="text-gray-600">Initial Investment: {formatRupiah(initialInvestment)}</span>
           </div>
           <div className="flex flex-col gap-2">
             <h3 className="font-semibold">Business Model: B2C Direct Sales</h3>
-            <span className="text-gray-600">Expected ROI: 140.0%</span>
+            <span className="text-gray-600">Expected ROI: {metrics.roi}%</span>
           </div>
         </div>
       </section>

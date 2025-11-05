@@ -4,12 +4,22 @@ import ProgressBar from "../../../shared/components/ui/ProgressBar";
 import ItemPill from "../../../shared/components/ui/ItemPill";
 
 function PerformanceTab({ data }) {
-  const initialInvestment = 50000;
-  const initialInvestmentPercentage = 100;
-  const monthlyPercentage = (8000 / initialInvestment) * 100;
-  const operatingCosts = (3000 / initialInvestment) * 100;
 
-  const { monthlyProjection, projectionsData } = data;
+  const { monthlyProjection, projectionsData, formatRupiah } = data;
+
+  const initialInvestment = projectionsData?.initialInvestment || 0;
+
+  const firstMonth = projectionsData?.monthlyProjections?.[0] || {};
+  const monthlyRevenue = firstMonth.revenue || 0;
+  const operatingCost = firstMonth.cost || 0;
+
+  const initialInvestmentPercentage = 100;
+  const monthlyPercentage = initialInvestment
+    ? (monthlyRevenue / initialInvestment) * 100
+    : 0;
+  const operatingCosts = initialInvestment
+    ? (operatingCost / initialInvestment) * 100
+    : 0;
 
   return (
     <div className="flex flex-col">
@@ -18,7 +28,7 @@ function PerformanceTab({ data }) {
           <RevenueCostChart data={monthlyProjection} />
         </div>
         <div className="border border-gray-300 rounded-2xl p-8 flex items-center h-[400px]">
-          <ROITrajectoryChart data={projectionsData.monthlyProjections} />
+          <ROITrajectoryChart data={projectionsData.roiTrajectory} />
         </div>
       </section>
       <section className="border border-gray-300 rounded-2xl p-8 mt-8">
@@ -27,17 +37,17 @@ function PerformanceTab({ data }) {
           <ProgressBar
             title={"Initial Investment"}
             percentageProgress={initialInvestmentPercentage}
-            value={`Rp${initialInvestment}`}
+            value={formatRupiah(initialInvestment)}
           />
           <ProgressBar
             title={"Monthly Revenue"}
             percentageProgress={monthlyPercentage}
-            value={"Rp8000"}
+            value={formatRupiah(monthlyRevenue)}
           />
           <ProgressBar
             title={"Operating Costs"}
             percentageProgress={operatingCosts}
-            value={"Rp3000"}
+            value={formatRupiah(operatingCost)}
           />
         </div>
         <div className="flex flex-col md:flex-row md:gap-4 mt-4">

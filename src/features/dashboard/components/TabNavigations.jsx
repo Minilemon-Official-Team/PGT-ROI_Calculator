@@ -15,9 +15,9 @@ function TabNavigations() {
             case "performance":
                 return <PerformanceTab data={dashboardData} />;
             case "funding-models":
-                return <FundingModelsTab />;
+                return <FundingModelsTab data={dashboardData} />;
             case "projections":
-                return <ProjectionsTab />;
+                return <ProjectionsTab data={dashboardData} />;
             default:
                 return <h1>performance</h1>
         }

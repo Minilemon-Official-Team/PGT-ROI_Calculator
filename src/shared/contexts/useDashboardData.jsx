@@ -69,8 +69,8 @@ export const useDashboardData = () => {
       const roi =
         cumulativeInvestment > 0
           ? ((month.cumulativeProfit + initialInvestment) /
-              cumulativeInvestment) *
-            100
+            cumulativeInvestment) *
+          100
           : 0;
 
       return {
@@ -90,6 +90,9 @@ export const useDashboardData = () => {
     );
 
     return {
+
+      initialInvestment,
+
       monthlyProjections: monthlyProjections.slice(0, 12), // 12 bulan untuk tabel
       roiTrajectory: sampledRoiTrajectory, // ROI trajectory bulanan untuk chart
       breakEvenPoint: metrics.paybackPeriod * 12, // dalam bulan

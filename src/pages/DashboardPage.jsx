@@ -7,9 +7,13 @@ import { useContext } from 'react';
 import { NavStateContext } from '../shared/contexts';
 import { Navigate } from "react-router-dom";
 
+import { useDashboardData } from "../shared/contexts/useDashboardData";
+
 function DashboardPage() {
 
     const navState = useContext(NavStateContext);
+
+    const { metrics, formatRupiah } = useDashboardData();
 
     if (!navState.formCalculated) {
         return <Navigate to={"/kalkulator"} replace />
@@ -22,19 +26,19 @@ function DashboardPage() {
                     <DashboardMetrics
                         icon={<Target color="green" />}
                         title={"ROI"}
-                        value={"140.0%"}
+                        value={`${metrics.roi}%`}
                         color="#1E824C"
                     />
                     <DashboardMetrics
                         icon={<DollarSign color="#2E46BF" />}
                         title={"Net Profit"}
-                        value={"Rp70.000"}
+                        value={`${formatRupiah(metrics.netProfit)}`}
                         color="#2E46BF"
                     />
                     <DashboardMetrics
                         icon={<Calendar color="#B04A00" />}
                         title={"Payback Period"}
-                        value={"0.8 years"}
+                        value={`${metrics.paybackPeriod} years`}
                         color="#B04A00"
                     />
                 </section>
