@@ -1,12 +1,10 @@
-// shared/hooks/useDashboardData.js - YANG SUDAH DIPERBAIKI
+// shared/hooks/useDashboardData.js - PERBAIKAN ROI TRAJECTORY
 import { useContext, useMemo } from "react";
 import { NavStateContext } from "../contexts";
 
 export const useDashboardData = () => {
   const navState = useContext(NavStateContext);
   const { roiResult } = navState;
-
-  // **PERBAIKAN: Pindahkan semua useMemo ke ATAS sebelum conditional return**
 
   // Data untuk funding & models tab (dari BE)
   const fundingModelsData = useMemo(() => {
@@ -49,55 +47,74 @@ export const useDashboardData = () => {
     };
   }, [roiResult]);
 
-  // Data untuk projections tab (dari BE monthlyData)
+  // **PERBAIKAN: Data untuk projections tab dengan ROI trajectory BULANAN**
   const projectionsData = useMemo(() => {
     if (!roiResult?.chartData?.monthlyData) return null;
 
     const monthlyProjection = roiResult.chartData.monthlyData;
+    const initialInvestment =
+      roiResult.financialDetails?.initial_investment || 0;
     const metrics = {
       roi: roiResult.roi_percentage || 0,
       netProfit: roiResult.net_profit || 0,
       paybackPeriod: roiResult.payback_period_years || 0,
     };
 
-    const monthlyProjections = monthlyProjection.slice(0, 12); // 12 bulan pertama
-    const yearlyProjections = [];
+    // **PERBAIKAN: Ambil 12-24 bulan pertama untuk monthly projections**
+    const monthlyProjections = monthlyProjection.slice(0, 24); // 24 bulan pertama
 
-    // Generate yearly projections dari monthly data
-    for (let year = 1; year <= 5; year++) {
-      const yearData = monthlyProjection.slice(0, year * 12);
-      const yearlyRevenue = yearData.reduce(
-        (sum, month) => sum + month.revenue,
-        0
-      );
-      const yearlyProfit = yearData.reduce(
-        (sum, month) => sum + month.profit,
-        0
-      );
+    // **PERBAIKAN: Generate ROI trajectory BULANAN, bukan tahunan**
+    const roiTrajectory = monthlyProjection.map((month, index) => {
+      const cumulativeInvestment = initialInvestment;
+      const roi =
+        cumulativeInvestment > 0
+          ? ((month.cumulativeProfit + initialInvestment) /
+              cumulativeInvestment) *
+            100
+          : 0;
 
-      yearlyProjections.push({
-        year: year,
-        revenue: yearlyRevenue,
-        profit: yearlyProfit,
-        cumulativeProfit:
-          yearlyProfit - (roiResult.financialDetails?.initial_investment || 0),
-        roi:
-          (yearlyProfit /
-            (roiResult.financialDetails?.initial_investment || 1)) *
-          100,
-      });
-    }
+      return {
+        month: index + 1,
+        revenue: month.revenue,
+        profit: month.profit,
+        cumulativeProfit: month.cumulativeProfit,
+        roi: Math.max(roi, 0), // ROI tidak boleh negatif
+      };
+    });
+
+    // **PERBAIKAN: Sample data untuk chart (max 24 titik)**
+    const sampledRoiTrajectory = roiTrajectory.filter(
+      (_, index) =>
+        index % Math.ceil(roiTrajectory.length / 24) === 0 ||
+        index === roiTrajectory.length - 1
+    );
 
     return {
-      monthlyProjections,
-      yearlyProjections,
-      breakEvenPoint: metrics.paybackPeriod * 12,
+      monthlyProjections: monthlyProjections.slice(0, 12), // 12 bulan untuk tabel
+      roiTrajectory: sampledRoiTrajectory, // ROI trajectory bulanan untuk chart
+      breakEvenPoint: metrics.paybackPeriod * 12, // dalam bulan
       totalROI: metrics.roi,
       netProfit: metrics.netProfit,
+      // **TAMBAHAN: Data untuk chart yang compatible dengan existing component**
+      chartData: {
+        monthlyRoiGrowth: {
+          labels: sampledRoiTrajectory.map((item) => `Month ${item.month}`),
+          datasets: [
+            {
+              label: "ROI Progress",
+              data: sampledRoiTrajectory.map((item) => item.roi),
+              borderColor: "#ff7300",
+              backgroundColor: "rgba(255, 115, 0, 0.1)",
+              fill: true,
+              tension: 0.4,
+            },
+          ],
+        },
+      },
     };
   }, [roiResult]);
 
-  // **PERBAIKAN: Conditional return SETELAH semua hooks**
+  // Conditional return
   if (!roiResult) {
     return {
       metrics: { roi: 0, netProfit: 0, paybackPeriod: 0 },
@@ -112,7 +129,6 @@ export const useDashboardData = () => {
     };
   }
 
-  // **PERBAIKAN: Gunakan data dinamis dari BE, bukan hitung ulang di FE**
   const metrics = {
     roi: roiResult.roi_percentage || 0,
     netProfit: roiResult.net_profit || 0,
@@ -128,10 +144,7 @@ export const useDashboardData = () => {
       ) || [],
   };
 
-  // **PERBAIKAN: Chart data langsung dari BE response (sudah dinamis!)**
   const chartData = roiResult.chartData;
-
-  // **PERBAIKAN: Monthly projection dari BE (data dinamis)**
   const monthlyProjection = chartData?.monthlyData || [];
 
   // Helper functions
@@ -153,11 +166,11 @@ export const useDashboardData = () => {
     metrics,
     chartData,
     businessInfo,
-    monthlyProjection, // ← DATA BARU: monthly projection dinamis
+    monthlyProjection,
 
     // Tab-specific data
     fundingModelsData,
-    projectionsData,
+    projectionsData, // ← SEKARANG SUDAH ADA ROI TRAJECTORY BULANAN
 
     // State
     isLoading: false,
