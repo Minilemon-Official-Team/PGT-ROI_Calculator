@@ -2,19 +2,23 @@ import RevenueCostChart from "./RevenueCostChart";
 import ROITrajectoryChart from "./ROITrajectoryChart";
 import ProgressBar from "../../../shared/components/ui/ProgressBar";
 import ItemPill from "../../../shared/components/ui/ItemPill";
-function PerformanceTab() {
+
+function PerformanceTab({ data }) {
   const initialInvestment = 50000;
   const initialInvestmentPercentage = 100;
   const monthlyPercentage = (8000 / initialInvestment) * 100;
   const operatingCosts = (3000 / initialInvestment) * 100;
+
+  const { chartData } = data;
+
   return (
     <div className="flex flex-col">
       <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="border border-gray-300 rounded-2xl p-8 flex items-center h-[400px]">
-          <RevenueCostChart />
+          <RevenueCostChart data={chartData} />
         </div>
         <div className="border border-gray-300 rounded-2xl p-8 flex items-center h-[400px]">
-          <ROITrajectoryChart />
+          <ROITrajectoryChart data={chartData} />
         </div>
       </section>
       <section className="border border-gray-300 rounded-2xl p-8 mt-8">

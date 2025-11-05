@@ -3,13 +3,17 @@ import PerformanceTab from "./PerformanceTab";
 import FundingModelsTab from "./FundingModelsTab";
 import ProjectionsTab from "./ProjectionsTab";
 
+import { useDashboardData } from "../../../shared/contexts/useDashboardData";
+
 function TabNavigations() {
     const [isActive, setIsActive] = useState('performance');
+
+    const dashboardData = useDashboardData();
 
     const renderTab = () => {
         switch (isActive) {
             case "performance":
-                return <PerformanceTab />;
+                return <PerformanceTab data={dashboardData} />;
             case "funding-models":
                 return <FundingModelsTab />;
             case "projections":
