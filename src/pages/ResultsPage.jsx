@@ -32,7 +32,9 @@ function ResultsPage() {
   const getLatestRoiResult = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:3000/api/roi-results");
+      const res = await axios.get(
+        "https://roi-calculator-backend-murex.vercel.app/api/roi-results"
+      );
       const results = res.data.data;
 
       if (results.length > 0) {

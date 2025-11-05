@@ -131,7 +131,7 @@ function FormCalculator({ totalProgress }) {
       console.log("Mapped equipment IDs:", payload.equipments);
 
       const response = await axios.post(
-        "http://localhost:3000/api/calculate-roi",
+        "https://roi-calculator-backend-murex.vercel.app/api/calculate-roi",
         payload
       );
 
