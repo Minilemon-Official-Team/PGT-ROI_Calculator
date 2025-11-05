@@ -10,6 +10,7 @@ import KeyInsightCard from "../features/results/components/KeyInsightCard"; // I
 import { NavStateContext } from "../shared/contexts";
 
 function ResultsPage() {
+  const API_BASE = "/api";
   const navState = useContext(NavStateContext);
   const { roiResult, formCalculated } = navState;
 
@@ -32,9 +33,7 @@ function ResultsPage() {
   const getLatestRoiResult = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(
-        "https://roi-calculator-backend-murex.vercel.app/api/roi-results"
-      );
+      const res = await axios.get("/api/roi-results");
       const results = res.data.data;
 
       if (results.length > 0) {
