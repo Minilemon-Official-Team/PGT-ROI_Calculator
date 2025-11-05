@@ -7,11 +7,13 @@ import Home from "../../pages/";
 import CalculatorPage from "../../pages/CalculatorPage";
 import ResultsPage from "../../pages/ResultsPage";
 import DashboardPage from "../../pages/DashboardPage";
+import ErrorPage from "../../pages/ErrorPage";
 
 export const router = createBrowserRouter([
     {
         path: '/',
         element: <RootLayout />,
+        errorElement: <ErrorPage />,
         children: [
             {
                 path: '/',
