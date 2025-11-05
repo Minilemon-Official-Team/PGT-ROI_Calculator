@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npx prisma db push && npx prisma generate --schema=./server/config/prisma/schema.prisma && vite build",
+    "build": "vite build && npx prisma generate && next build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "postinstall": "prisma generate --schema=./server/config/prisma/schema.prisma"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",
