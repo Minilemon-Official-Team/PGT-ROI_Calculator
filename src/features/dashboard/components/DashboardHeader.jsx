@@ -1,10 +1,20 @@
 import PeriodDropDown from "./PeriodDropDown";
-import { useState } from "react";
 import { Download } from "lucide-react";
-function DashboardHeader() {
-    const periodOptions = [6, 12, 24, 36]
 
-    const [period, setPeriod] = useState(6);
+import { useContext, useMemo } from "react";
+import { NavStateContext } from "../../../shared/contexts";
+
+function DashboardHeader() {
+
+    const { roiResult, period, setPeriod } = useContext(NavStateContext);
+
+    const timeframe = roiResult?.financialDetails?.timeframe || 24;
+
+    const periodOptions = useMemo(() => {
+        const options = [6, 12, 24, 36];
+        return options.filter((opt) => opt <= timeframe);
+    }, [timeframe]);
+
     return (
         <section className="flex flex-col md:flex-row mt-8 justify-between border border-gray-300 p-8 rounded-2xl">
             <header>

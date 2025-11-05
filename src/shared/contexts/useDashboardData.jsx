@@ -4,7 +4,7 @@ import { NavStateContext } from "../contexts";
 
 export const useDashboardData = () => {
   const navState = useContext(NavStateContext);
-  const { roiResult } = navState;
+  const { roiResult, period } = navState;
 
   // Data untuk funding & models tab (dari BE)
   const fundingModelsData = useMemo(() => {
@@ -51,7 +51,7 @@ export const useDashboardData = () => {
   const projectionsData = useMemo(() => {
     if (!roiResult?.chartData?.monthlyData) return null;
 
-    const monthlyProjection = roiResult.chartData.monthlyData;
+    const monthlyProjection = roiResult.chartData.monthlyData.slice(0, period);
     const initialInvestment =
       roiResult.financialDetails?.initial_investment || 0;
     const metrics = {
@@ -61,7 +61,7 @@ export const useDashboardData = () => {
     };
 
     // **PERBAIKAN: Ambil 12-24 bulan pertama untuk monthly projections**
-    const monthlyProjections = monthlyProjection.slice(0, 24); // 24 bulan pertama
+    const monthlyProjections = monthlyProjection; // 24 bulan pertama
 
     // **PERBAIKAN: Generate ROI trajectory BULANAN, bukan tahunan**
     const roiTrajectory = monthlyProjection.map((month, index) => {
@@ -83,17 +83,21 @@ export const useDashboardData = () => {
     });
 
     // **PERBAIKAN: Sample data untuk chart (max 24 titik)**
+    const maxPoints = 24;
     const sampledRoiTrajectory = roiTrajectory.filter(
       (_, index) =>
-        index % Math.ceil(roiTrajectory.length / 24) === 0 ||
+        index % Math.ceil(roiTrajectory.length / Math.min(period, maxPoints)) === 0 ||
         index === roiTrajectory.length - 1
     );
+
+    console.log("Total from BE:", roiResult.chartData.monthlyData.length);
+    console.log("After slice (by period):", monthlyProjection.length);
+    console.log("After sampled:", sampledRoiTrajectory.length);
 
     return {
 
       initialInvestment,
-
-      monthlyProjections: monthlyProjections.slice(0, 12), // 12 bulan untuk tabel
+      monthlyProjections, // 12 bulan untuk tabel
       roiTrajectory: sampledRoiTrajectory, // ROI trajectory bulanan untuk chart
       breakEvenPoint: metrics.paybackPeriod * 12, // dalam bulan
       totalROI: metrics.roi,
@@ -115,7 +119,7 @@ export const useDashboardData = () => {
         },
       },
     };
-  }, [roiResult]);
+  }, [roiResult, period]);
 
   // Conditional return
   if (!roiResult) {

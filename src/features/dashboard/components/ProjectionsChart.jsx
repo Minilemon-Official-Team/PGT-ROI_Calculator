@@ -11,7 +11,7 @@ defaults.plugins.title.color = "black";
 
 function ProjectionsChart({ data }) {
     const chartData = {
-        labels: data.slice(0, 24).map((item) => item.month),
+        labels: data.map((item) => item.month),
         datasets: [
             {
                 label: "Cost",
