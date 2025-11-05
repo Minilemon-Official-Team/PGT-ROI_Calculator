@@ -1,11 +1,20 @@
 import ProjectionsChart from "./ProjectionsChart";
 import ProgressBar from "../../../shared/components/ui/ProgressBar";
 
-function ProjectionsTab() {
-  const initialInvestment = 50000000;
-  const paybackPeriod = 10000000;
-  const breakEvenMonth = Math.floor(initialInvestment / paybackPeriod);
-  const percentageProgress = (breakEvenMonth / 12) * 100;
+function ProjectionsTab({ data }) {
+
+  const { projectionsData, formatRupiah } = data;
+
+  const monthlyProjection = projectionsData?.monthlyProjections || [];
+  const breakEvenMonth = projectionsData?.breakEvenPoint || 0;
+  const percentageProgress =
+    breakEvenMonth > 0
+      ? Math.min((12 / breakEvenMonth) * 100, 100)
+      : 0;
+
+  const year1Profit = monthlyProjection[11]?.cumulativeProfit || 0;
+  const year3Profit = monthlyProjection[35]?.cumulativeProfit || year1Profit;
+
   return (
     <div className="flex flex-col">
       <section className="flex flex-col border border-gray-300 rounded-2xl p-6 sm:p-8 w-full max-w-[1200px] mx-auto">
@@ -14,7 +23,7 @@ function ProjectionsTab() {
         </h2>
         <div className="flex justify-center items-center py-6 sm:py-12 px-4 sm:px-8 w-full h-[320px] sm:h-[500px]">
           <div className="w-full h-full">
-            <ProjectionsChart />
+            <ProjectionsChart data={monthlyProjection} />
           </div>
         </div>
       </section>
@@ -25,7 +34,7 @@ function ProjectionsTab() {
           <ProgressBar
             title={"Break Even-Month"}
             percentageProgress={percentageProgress}
-            value={breakEvenMonth}
+            value={breakEvenMonth.toFixed(1)}
           />
           <span>Time to recover initial investment</span>
         </div>
@@ -34,13 +43,13 @@ function ProjectionsTab() {
           <div className="flex flex-row justify-between">
             <span>Year 1 Profit</span>
             <span className="font-semibold" style={{ color: "#1E824C" }}>
-              Rp60,000
+              {formatRupiah(year1Profit)}
             </span>
           </div>
           <div className="flex flex-row justify-between">
             <span>3-Year Projection</span>
             <span className="font-semibold" style={{ color: "#2E46BF" }}>
-              Rp198,000
+              {formatRupiah(year3Profit)}
             </span>
           </div>
         </div>

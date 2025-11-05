@@ -1,6 +1,5 @@
 import { Chart as ChartJS, defaults } from 'chart.js/auto';
 import { Bar } from 'react-chartjs-2';
-import { data } from "../constants/data";
 
 defaults.maintainAspectRatio = false;
 defaults.responsive = true;
@@ -10,9 +9,9 @@ defaults.plugins.title.align = "start";
 defaults.plugins.title.font.size = 16;
 defaults.plugins.title.color = "black";
 
-function RevenueCostChart() {
+function RevenueCostChart({ data }) {
     const chartData = {
-        labels: data.slice(0, 24).map((item) => item.month),
+        labels: data.map((item) => item.month),
         datasets: [
             {
                 type: "line",

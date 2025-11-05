@@ -8,6 +8,7 @@ export const NavStateContext = createContext();
 export const NavStateProvider = ({ children }) => {
   const [formCalculated, setFormCalculated] = useState(false);
   const [roiResult, setRoiResult] = useState(null);
+  const [period, setPeriod] = useState(6);
 
   return (
     <NavStateContext.Provider
@@ -16,6 +17,8 @@ export const NavStateProvider = ({ children }) => {
         setFormCalculated,
         roiResult,
         setRoiResult,
+        period,
+        setPeriod
       }}
     >
       {children}
