@@ -13,7 +13,37 @@ export const useDashboardData = () => {
 
   // Data untuk funding & models tab (dari BE)
   const fundingModelsData = useMemo(() => {
-    // ... (kode existing tetap sama)
+    const calculateRiskLevel = (roi) => {
+      if (roi > 100) return { level: "Low", color: "green" };
+      if (roi > 50) return { level: "Medium", color: "orange" };
+      if (roi > 0) return { level: "High", color: "red" };
+      return { level: "Very High", color: "darkred" };
+    };
+    const generateRecommendation = (result) => {
+      const { roi_percentage, payback_period_years } = result;
+
+      if (roi_percentage > 100 && payback_period_years < 2) {
+        return "Excellent investment with quick returns. Recommended to proceed.";
+      } else if (roi_percentage > 50) {
+        return "Good investment potential. Consider optimizing costs for better returns.";
+      } else if (roi_percentage > 0) {
+        return "Moderate investment. Review business strategy and cost structure.";
+      } else {
+        return "High risk investment. Not recommended without significant changes.";
+      }
+    };
+    if (!roiResult) return null;
+
+    const { businessStrategy, financialDetails } = roiResult;
+
+    return {
+      businessModel: businessStrategy?.business_model || "Not specified",
+      fundingOption: businessStrategy?.funding_option || "Not specified",
+      strategyName: businessStrategy?.strategy_name || "Custom Strategy",
+      timeframe: financialDetails?.timeframe || 24,
+      riskLevel: calculateRiskLevel(roiResult.roi_percentage),
+      recommendation: generateRecommendation(roiResult),
+    };
   }, [roiResult]);
 
   // **PERBAIKAN: Gunakan dashboardPeriod untuk filtering, bukan initialPeriod**
