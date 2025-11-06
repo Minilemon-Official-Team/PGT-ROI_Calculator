@@ -73,7 +73,7 @@ Dengan antarmuka sederhana dan hasil perhitungan instan, aplikasi ini cocok untu
 
 Tambahkan remote repository utama untuk memastikan fork Anda tetap sinkron:  
 ```bash
-git remote add upstream https://github.com/playground-team/ml-roi-calculator.git
+git remote add upstream https://github.com/Minilemon-Official-Team/PGT-ROI_Calculator.git
 ```
 
 Untuk memperbarui fork Anda dengan repository utama:  
