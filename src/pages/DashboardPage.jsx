@@ -12,7 +12,15 @@ import { useDashboardData } from "../shared/contexts/useDashboardData";
 
 function DashboardPage() {
   const navState = useContext(NavStateContext);
-  const { metrics, formatRupiah, projectionsData } = useDashboardData(); // ← tambahkan projectionsData
+  const {
+    metrics,
+    formatRupiah,
+    projectionsData,
+    growthPotential3Years, // ← TAMBAH INI
+    dashboardPeriod,
+    updateDashboardPeriod,
+    maxAvailableMonths,
+  } = useDashboardData();
 
   if (!navState.formCalculated) {
     return <Navigate to={"/kalkulator"} replace />;
@@ -42,8 +50,13 @@ function DashboardPage() {
           />
         </section>
         <DashboardHeader />
-        <TabNavigations projectionsData={projectionsData} />{" "}
-        {/* ← teruskan data */}
+        <TabNavigations
+          projectionsData={projectionsData}
+          growthPotential3Years={growthPotential3Years} // ← TERUSKAN INI
+          dashboardPeriod={dashboardPeriod}
+          updateDashboardPeriod={updateDashboardPeriod}
+          maxAvailableMonths={maxAvailableMonths}
+        />
       </section>
     </>
   );

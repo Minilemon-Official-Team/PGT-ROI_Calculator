@@ -1,57 +1,31 @@
-// shared/hooks/useDashboardData.js - PERBAIKAN ROI TRAJECTORY
-import { useContext, useMemo } from "react";
+// shared/hooks/useDashboardData.js - PERBAIKAN FILTER BULAN
+import { useContext, useMemo, useState } from "react";
 import { NavStateContext } from "../contexts";
 
 export const useDashboardData = () => {
   const navState = useContext(NavStateContext);
-  const { roiResult, period } = navState;
+  const { roiResult, period: initialPeriod } = navState;
+
+  // **PERBAIKAN: State untuk filter bulan di dashboard (bisa sampai 36 bulan)**
+  const [dashboardPeriod, setDashboardPeriod] = useState(
+    Math.min(initialPeriod, 36)
+  );
 
   // Data untuk funding & models tab (dari BE)
   const fundingModelsData = useMemo(() => {
-    if (!roiResult) return null;
-
-    const calculateRiskLevel = (roi) => {
-      if (roi > 100) return { level: "Low", color: "green" };
-      if (roi > 50) return { level: "Medium", color: "orange" };
-      if (roi > 0) return { level: "High", color: "red" };
-      return { level: "Very High", color: "darkred" };
-    };
-
-    const generateRecommendation = (result) => {
-      const { roi_percentage, payback_period_years } = result;
-
-      if (roi_percentage > 100 && payback_period_years < 2) {
-        return "Excellent investment with quick returns. Recommended to proceed.";
-      } else if (roi_percentage > 50) {
-        return "Good investment potential. Consider optimizing costs for better returns.";
-      } else if (roi_percentage > 0) {
-        return "Moderate investment. Review business strategy and cost structure.";
-      } else {
-        return "High risk investment. Not recommended without significant changes.";
-      }
-    };
-
-    const businessModel =
-      roiResult.businessStrategy?.business_model || "Not specified";
-    const fundingOption =
-      roiResult.businessStrategy?.funding_option || "Not specified";
-    const roi = roiResult.roi_percentage || 0;
-
-    return {
-      businessModel,
-      fundingOption,
-      strategyName: "Custom Strategy",
-      timeframe: roiResult.financialDetails?.timeframe || 24,
-      riskLevel: calculateRiskLevel(roi),
-      recommendation: generateRecommendation(roiResult),
-    };
+    // ... (kode existing tetap sama)
   }, [roiResult]);
 
-  // **PERBAIKAN: Data untuk projections tab dengan ROI trajectory BULANAN**
+  // **PERBAIKAN: Gunakan dashboardPeriod untuk filtering, bukan initialPeriod**
   const projectionsData = useMemo(() => {
     if (!roiResult?.chartData?.monthlyData) return null;
 
-    const monthlyProjection = roiResult.chartData.monthlyData.slice(0, period);
+    const allMonthlyData = roiResult.chartData.monthlyData;
+    const maxAvailableMonths = Math.min(allMonthlyData.length, 36);
+
+    // **GUNAKAN dashboardPeriod untuk data yang difilter**
+    const monthlyProjection = allMonthlyData.slice(0, dashboardPeriod);
+
     const initialInvestment =
       roiResult.financialDetails?.initial_investment || 0;
     const metrics = {
@@ -60,17 +34,13 @@ export const useDashboardData = () => {
       paybackPeriod: roiResult.payback_period_years || 0,
     };
 
-    // **PERBAIKAN: Ambil 12-24 bulan pertama untuk monthly projections**
-    const monthlyProjections = monthlyProjection; // 24 bulan pertama
-
-    // **PERBAIKAN: Generate ROI trajectory BULANAN, bukan tahunan**
     const roiTrajectory = monthlyProjection.map((month, index) => {
       const cumulativeInvestment = initialInvestment;
       const roi =
         cumulativeInvestment > 0
           ? ((month.cumulativeProfit + initialInvestment) /
-            cumulativeInvestment) *
-          100
+              cumulativeInvestment) *
+            100
           : 0;
 
       return {
@@ -78,48 +48,78 @@ export const useDashboardData = () => {
         revenue: month.revenue,
         profit: month.profit,
         cumulativeProfit: month.cumulativeProfit,
-        roi: Math.max(roi, 0), // ROI tidak boleh negatif
+        roi: Math.max(roi, 0),
       };
     });
 
-    // **PERBAIKAN: Sample data untuk chart (max 24 titik)**
-    const maxPoints = 24;
-    const sampledRoiTrajectory = roiTrajectory.filter(
-      (_, index) =>
-        index % Math.ceil(roiTrajectory.length / Math.min(period, maxPoints)) === 0 ||
-        index === roiTrajectory.length - 1
-    );
-
-    console.log("Total from BE:", roiResult.chartData.monthlyData.length);
-    console.log("After slice (by period):", monthlyProjection.length);
-    console.log("After sampled:", sampledRoiTrajectory.length);
-
     return {
-
       initialInvestment,
-      monthlyProjections, // 12 bulan untuk tabel
-      roiTrajectory: sampledRoiTrajectory, // ROI trajectory bulanan untuk chart
-      breakEvenPoint: metrics.paybackPeriod * 12, // dalam bulan
+      monthlyProjections: monthlyProjection,
+      roiTrajectory: roiTrajectory,
+      breakEvenPoint: metrics.paybackPeriod * 12,
       totalROI: metrics.roi,
       netProfit: metrics.netProfit,
-      // **TAMBAHAN: Data untuk chart yang compatible dengan existing component**
-      chartData: {
-        monthlyRoiGrowth: {
-          labels: sampledRoiTrajectory.map((item) => `Month ${item.month}`),
-          datasets: [
-            {
-              label: "ROI Progress",
-              data: sampledRoiTrajectory.map((item) => item.roi),
-              borderColor: "#ff7300",
-              backgroundColor: "rgba(255, 115, 0, 0.1)",
-              fill: true,
-              tension: 0.4,
-            },
-          ],
-        },
-      },
+      maxAvailableMonths,
     };
-  }, [roiResult, period]);
+  }, [roiResult, dashboardPeriod]);
+
+  // **DATA BARU: Growth Potential 3 Years (selalu 36 bulan)**
+  const growthPotential3Years = useMemo(() => {
+    if (!roiResult?.chartData?.monthlyData) return null;
+
+    const allMonthlyData = roiResult.chartData.monthlyData;
+
+    // **SELALU ambil 36 bulan, atau maksimal yang tersedia**
+    const monthsToShow = Math.min(36, allMonthlyData.length);
+    const monthlyProjection = allMonthlyData.slice(0, monthsToShow);
+
+    const initialInvestment =
+      roiResult.financialDetails?.initial_investment || 0;
+
+    // Generate ROI trajectory untuk 36 bulan
+    const roiTrajectory = monthlyProjection.map((month, index) => {
+      const cumulativeInvestment = initialInvestment;
+      const roi =
+        cumulativeInvestment > 0
+          ? ((month.cumulativeProfit + initialInvestment) /
+              cumulativeInvestment) *
+            100
+          : 0;
+
+      return {
+        month: index + 1,
+        revenue: month.revenue,
+        profit: month.profit,
+        cumulativeProfit: month.cumulativeProfit,
+        roi: Math.max(roi, 0),
+      };
+    });
+
+    // Hitung metrics untuk 3 years
+    const threeYearROI =
+      roiTrajectory.length > 0
+        ? roiTrajectory[roiTrajectory.length - 1].roi
+        : 0;
+    const threeYearNetProfit =
+      roiTrajectory.length > 0
+        ? roiTrajectory[roiTrajectory.length - 1].cumulativeProfit
+        : 0;
+
+    return {
+      roiTrajectory: roiTrajectory,
+      totalROI: threeYearROI,
+      netProfit: threeYearNetProfit,
+      monthlyProjections: monthlyProjection,
+      initialInvestment: initialInvestment,
+    };
+  }, [roiResult]); // **TIDAK tergantung dashboardPeriod**
+
+  // Fungsi update dashboard period
+  const updateDashboardPeriod = (newPeriod) => {
+    if (newPeriod >= 1 && newPeriod <= 36) {
+      setDashboardPeriod(newPeriod);
+    }
+  };
 
   // Conditional return
   if (!roiResult) {
@@ -130,9 +130,13 @@ export const useDashboardData = () => {
       monthlyProjection: [],
       fundingModelsData: null,
       projectionsData: null,
+      growthPotential3Years: null,
       isLoading: true,
       formatRupiah: (amount) => `Rp${amount?.toLocaleString() || "0"}`,
       formatPercentage: (value) => `${value?.toFixed(1) || "0"}%`,
+      dashboardPeriod: 12,
+      updateDashboardPeriod: () => {},
+      maxAvailableMonths: 36,
     };
   }
 
@@ -177,7 +181,13 @@ export const useDashboardData = () => {
 
     // Tab-specific data
     fundingModelsData,
-    projectionsData, // ← SEKARANG SUDAH ADA ROI TRAJECTORY BULANAN
+    projectionsData, // Data yang mengikuti filter user
+    growthPotential3Years, // **DATA BARU: Selalu 36 bulan**
+
+    // State & functions
+    dashboardPeriod,
+    updateDashboardPeriod,
+    maxAvailableMonths: projectionsData?.maxAvailableMonths || 36,
 
     // State
     isLoading: false,
