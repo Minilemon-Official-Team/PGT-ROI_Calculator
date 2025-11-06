@@ -111,7 +111,7 @@ function ResultsPage() {
           )}
           monthly_operating_cost={formatRupiah(
             result.total_operating_cost /
-              (result.financialDetails?.timeframe || 24)
+            (result.financialDetails?.timeframe || 24)
           )}
           monthly_profit={formatRupiah(
             result.net_profit / (result.financialDetails?.timeframe || 24)
