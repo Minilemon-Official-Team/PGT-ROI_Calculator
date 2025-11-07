@@ -31,7 +31,8 @@ export const calculateRoi = async (req, res) => {
   try {
     const { financial_details, business_strategy, equipments } = req.body;
 
-    console.log("Received payload:", req.body);
+    console.log("=== NEW ROI CALCULATION ===");
+    console.log("Received payload:", JSON.stringify(req.body, null, 2));
 
     // Validasi input
     if (!financial_details) {
@@ -52,65 +53,78 @@ export const calculateRoi = async (req, res) => {
     if (
       !initial_investment ||
       !expected_monthly_revenue ||
-      !monthly_operating_cost ||
-      !timeframe
+      !monthly_operating_cost
     ) {
       return res.status(400).json({
         message:
-          "Semua data keuangan diperlukan: initial_investment, expected_monthly_revenue, monthly_operating_cost, timeframe",
+          "Semua data keuangan diperlukan: initial_investment, expected_monthly_revenue, monthly_operating_cost",
       });
     }
 
-    // Konversi ke number
-    const initInvest = parseInt(initial_investment);
-    const monthlyRev = parseInt(expected_monthly_revenue);
-    const monthlyCost = parseInt(monthly_operating_cost);
-    const timeFrame = parseInt(timeframe);
+    // Konversi ke number dengan precision
+    const initInvest = parseFloat(initial_investment);
+    const monthlyRev = parseFloat(expected_monthly_revenue);
+    const monthlyCost = parseFloat(monthly_operating_cost);
+    const timeFrame = parseInt(timeframe) || 36;
 
-    // **ENHANCED: Generate dynamic monthly data**
-    const monthlyData = generateDynamicMonthlyData({
+    console.log("Input values:", {
       initial_investment: initInvest,
       expected_monthly_revenue: monthlyRev,
       monthly_operating_cost: monthlyCost,
       timeframe: timeFrame,
+    });
+
+    // Generate data bulanan
+    const monthlyData = generateDynamicMonthlyData({
+      initial_investment: initInvest,
+      expected_monthly_revenue: monthlyRev,
+      monthly_operating_cost: monthlyCost,
+      timeframe: 36,
       business_model: business_strategy?.business_model,
     });
 
-    // Hitung totals dari dynamic data
-    const total_revenue = monthlyData.reduce(
+    // **PERBAIKAN: Data untuk timeframe user**
+    const userTimeframeData = monthlyData.slice(0, timeFrame);
+
+    // **PERBAIKAN: Hitung dengan precision**
+    const revenue_for_user_timeframe = userTimeframeData.reduce(
       (sum, month) => sum + month.revenue,
       0
     );
-    const total_operating_cost = monthlyData.reduce(
+    const cost_for_user_timeframe = userTimeframeData.reduce(
       (sum, month) => sum + month.cost,
       0
     );
-    const net_profit = total_revenue - total_operating_cost;
+    const net_profit = revenue_for_user_timeframe - cost_for_user_timeframe;
     const roi_percentage = (net_profit / initInvest) * 100;
 
-    // Hitung payback period yang lebih akurat
+    console.log("Calculation results:", {
+      revenue_total: revenue_for_user_timeframe,
+      cost_total: cost_for_user_timeframe,
+      net_profit: net_profit,
+      roi_percentage: roi_percentage,
+      months_used: timeFrame,
+    });
+
+    // Hitung payback period
     const payback_period_years = calculateDynamicPaybackPeriod(
-      monthlyData,
+      userTimeframeData,
       initInvest
     );
 
-    console.log("Enhanced calculation results:", {
-      total_revenue,
-      total_operating_cost,
-      net_profit,
-      roi_percentage,
-      payback_period_years,
-      monthly_data_points: monthlyData.length,
+    console.log("Final metrics:", {
+      net_profit: Math.round(net_profit),
+      roi_percentage: parseFloat(roi_percentage.toFixed(2)),
+      payback_period_years: payback_period_years,
     });
 
-    // **PERBAIKAN: Simpan tanpa monthly_data (gunakan schema existing)**
+    // Simpan ke database (sisa kode tetap sama)
     const newFinancial = await prisma.financialDetails.create({
       data: {
         initial_investment: initInvest,
         expected_monthly_revenue: monthlyRev,
         monthly_operating_cost: monthlyCost,
         timeframe: timeFrame,
-        // HAPUS: monthly_data - tidak ada di schema
       },
     });
 
@@ -143,7 +157,6 @@ export const calculateRoi = async (req, res) => {
       const validEquipmentIds = equipments.filter(
         (id) => Number.isInteger(id) && id > 0
       );
-
       for (const equipmentId of validEquipmentIds) {
         await prisma.businessStrategyEquipment.create({
           data: {
@@ -158,16 +171,16 @@ export const calculateRoi = async (req, res) => {
     const newResult = await prisma.rOIResult.create({
       data: {
         roi_percentage: parseFloat(roi_percentage.toFixed(2)),
-        net_profit: parseInt(net_profit),
-        payback_period_years: parseFloat(payback_period_years.toFixed(2)),
-        total_revenue: parseInt(total_revenue),
-        total_operating_cost: parseInt(total_operating_cost),
+        net_profit: Math.round(net_profit), // **PERBAIKAN: Gunakan Math.round**
+        payback_period_years: payback_period_years,
+        total_revenue: Math.round(revenue_for_user_timeframe),
+        total_operating_cost: Math.round(cost_for_user_timeframe),
         financialDetailsId: newFinancial.id,
         businessStrategyId: newStrategy.id,
       },
     });
 
-    // Ambil data lengkap
+    // Ambil data lengkap dan response
     const resultWithRelations = await prisma.rOIResult.findUnique({
       where: { id: newResult.id },
       include: {
@@ -182,12 +195,27 @@ export const calculateRoi = async (req, res) => {
       },
     });
 
-    // **ENHANCED: Return response dengan chart data (tanpa simpan ke database)**
+    // Generate ROI trajectory
+    const consistentRoiTrajectory = userTimeframeData.map((month, index) => {
+      const roi =
+        initInvest > 0
+          ? ((month.cumulativeProfit + initInvest) / initInvest) * 100
+          : 0;
+      return {
+        month: index + 1,
+        revenue: month.revenue,
+        profit: month.profit,
+        cumulativeProfit: month.cumulativeProfit,
+        roi: Math.max(roi, 0),
+      };
+    });
+
+    console.log("=== CALCULATION COMPLETE ===");
+
     res.status(201).json({
       message: "Perhitungan ROI berhasil!",
       data: {
         ...resultWithRelations,
-        // Tambahkan chart data dalam response (hanya di response, tidak di database)
         chartData: {
           revenueCost: generateRevenueCostChartData(monthlyData),
           roiGrowth: generateRoiGrowthChartData(
@@ -196,7 +224,8 @@ export const calculateRoi = async (req, res) => {
             initInvest
           ),
           performanceMetrics: generatePerformanceMetrics(resultWithRelations),
-          monthlyData: monthlyData, // Kirim raw monthly data juga
+          monthlyData: monthlyData,
+          roiTrajectory: consistentRoiTrajectory,
         },
       },
     });
@@ -209,7 +238,8 @@ export const calculateRoi = async (req, res) => {
   }
 };
 
-// Helper functions (tetap sama seperti sebelumnya)
+// **PERUBAHAN: Update helper function untuk handle 36 bulan dengan lebih smooth**
+// **PERBAIKAN: Hilangkan randomness untuk hasil yang konsisten**
 const generateDynamicMonthlyData = ({
   initial_investment,
   expected_monthly_revenue,
@@ -218,51 +248,72 @@ const generateDynamicMonthlyData = ({
   business_model,
 }) => {
   const monthlyData = [];
-  let currentRevenue = expected_monthly_revenue * 0.6; // Start at 60% capacity
-  let currentCost = monthly_operating_cost;
+
+  // **PERBAIKAN: Gunakan fixed starting point**
+  const startCapacity = 0.6; // 60% capacity di bulan pertama
+  let currentRevenue = expected_monthly_revenue * startCapacity;
+  const currentCost = monthly_operating_cost; // Cost tetap
 
   // Growth factors berdasarkan business model
   const growthFactors = getGrowthFactors(business_model);
 
   for (let month = 1; month <= timeframe; month++) {
-    // Apply growth to revenue (gradual increase)
+    // **PERBAIKAN: Growth calculation yang deterministic**
     if (month > 1) {
-      const growthRate =
-        growthFactors.monthlyGrowth * (1 + (Math.random() * 0.1 - 0.05)); // ±5% variance
-      currentRevenue = Math.min(
-        currentRevenue * (1 + growthRate),
+      let growthRate = growthFactors.monthlyGrowth;
+
+      // Growth reduction pattern yang fixed
+      if (month > 24) {
+        growthRate = growthFactors.monthlyGrowth * 0.3;
+      } else if (month > 12) {
+        growthRate = growthFactors.monthlyGrowth * 0.7;
+      }
+
+      // **PERBAIKAN: Growth calculation tanpa randomness**
+      currentRevenue = currentRevenue * (1 + growthRate);
+
+      // Cap at max capacity
+      if (
+        currentRevenue >
         expected_monthly_revenue * growthFactors.maxCapacity
-      );
+      ) {
+        currentRevenue = expected_monthly_revenue * growthFactors.maxCapacity;
+      }
     }
 
-    // Cost fluctuations (realistic variations)
-    const costVariation = 1 + (Math.random() * 0.1 - 0.05); // ±5% cost variation
-    currentCost = monthly_operating_cost * costVariation;
-
-    // Seasonal effects
-    const seasonalMultiplier = getSeasonalMultiplier(month);
+    // **PERBAIKAN: Seasonal multiplier yang deterministic**
+    const seasonalMultiplier = getDeterministicSeasonalMultiplier(month);
     const adjustedRevenue = currentRevenue * seasonalMultiplier;
 
-    const profit = adjustedRevenue - currentCost;
-    const cumulativeProfit =
-      monthlyData.length > 0
-        ? monthlyData[monthlyData.length - 1].cumulativeProfit + profit
-        : profit - initial_investment;
+    // **PERBAIKAN: Profit calculation dengan rounding yang konsisten**
+    const revenue = Math.round(adjustedRevenue);
+    const cost = Math.round(currentCost);
+    const profit = revenue - cost;
+
+    // **PERBAIKAN KRITIS: Cumulative profit calculation yang benar**
+    let cumulativeProfit;
+    if (month === 1) {
+      cumulativeProfit = profit - initial_investment;
+    } else {
+      cumulativeProfit = monthlyData[month - 2].cumulativeProfit + profit;
+    }
 
     monthlyData.push({
       month,
-      revenue: Math.round(adjustedRevenue),
-      cost: Math.round(currentCost),
-      profit: Math.round(profit),
-      cumulativeProfit: Math.round(cumulativeProfit),
-      revenueGrowth: Math.round(
-        ((adjustedRevenue -
-          (monthlyData[month - 2]?.revenue || adjustedRevenue)) /
-          (monthlyData[month - 2]?.revenue || adjustedRevenue)) *
-          100
-      ),
+      revenue: revenue,
+      cost: cost,
+      profit: profit,
+      cumulativeProfit: cumulativeProfit,
+      revenueGrowth:
+        month > 1
+          ? Math.round(
+              ((revenue - monthlyData[month - 2].revenue) /
+                monthlyData[month - 2].revenue) *
+                100
+            )
+          : 0,
       capacityUtilization: Math.round(
-        (adjustedRevenue / expected_monthly_revenue) * 100
+        (revenue / expected_monthly_revenue) * 100
       ),
     });
   }
@@ -270,51 +321,60 @@ const generateDynamicMonthlyData = ({
   return monthlyData;
 };
 
+// **PERUBAHAN: Update growth factors untuk 36 bulan yang lebih realistic**
 const getGrowthFactors = (business_model) => {
   const factors = {
-    "B2B Manufacturing": { monthlyGrowth: 0.08, maxCapacity: 1.2 },
-    "Penjualan Langsung (B2C)": { monthlyGrowth: 0.12, maxCapacity: 1.5 },
-    "Layanan Berlangganan": { monthlyGrowth: 0.05, maxCapacity: 1.1 },
-    "Waralaba (Franchise)": { monthlyGrowth: 0.06, maxCapacity: 1.3 },
-    "Produksi (B2B)": { monthlyGrowth: 0.07, maxCapacity: 1.15 },
+    "B2B Manufacturing": { monthlyGrowth: 0.06, maxCapacity: 1.15 }, // Growth lebih konservatif
+    "Penjualan Langsung (B2C)": { monthlyGrowth: 0.08, maxCapacity: 1.3 },
+    "Layanan Berlangganan": { monthlyGrowth: 0.04, maxCapacity: 1.05 }, // Growth kecil tapi stabil
+    "Waralaba (Franchise)": { monthlyGrowth: 0.05, maxCapacity: 1.2 },
+    "Produksi (B2B)": { monthlyGrowth: 0.055, maxCapacity: 1.12 },
   };
 
-  return factors[business_model] || { monthlyGrowth: 0.08, maxCapacity: 1.2 };
+  return factors[business_model] || { monthlyGrowth: 0.05, maxCapacity: 1.15 };
 };
 
-const getSeasonalMultiplier = (month) => {
-  const seasonalPatterns = {
-    1: 0.9,
-    2: 0.95,
-    3: 1.0,
-    4: 1.0,
-    5: 1.05,
-    6: 1.1,
-    7: 1.15,
-    8: 1.1,
-    9: 1.05,
-    10: 1.0,
-    11: 0.95,
-    12: 0.9,
-  };
+// **PERUBAHAN: Update seasonal multiplier untuk pattern yang lebih smooth**
+const getDeterministicSeasonalMultiplier = (month) => {
+  // Pattern yang sama setiap tahun, tanpa variasi
+  const monthInYear = ((month - 1) % 12) + 1;
 
-  return seasonalPatterns[((month - 1) % 12) + 1] || 1.0;
-};
-
-const calculateDynamicPaybackPeriod = (monthlyData, initialInvestment) => {
-  for (let i = 0; i < monthlyData.length; i++) {
-    if (monthlyData[i].cumulativeProfit >= 0) {
-      return (i + 1) / 12;
-    }
+  switch (monthInYear) {
+    case 1:
+      return 0.95; // January
+    case 2:
+      return 0.98; // February
+    case 3:
+      return 1.02; // March
+    case 4:
+      return 1.05; // April
+    case 5:
+      return 1.08; // May
+    case 6:
+      return 1.1; // June (peak)
+    case 7:
+      return 1.08; // July
+    case 8:
+      return 1.05; // August
+    case 9:
+      return 1.02; // September
+    case 10:
+      return 0.98; // October
+    case 11:
+      return 0.95; // November
+    case 12:
+      return 0.92; // December
+    default:
+      return 1.0;
   }
-  return monthlyData.length / 12;
 };
 
+// **PERUBAHAN: Update chart data functions untuk handle 36 bulan**
 const generateRevenueCostChartData = (monthlyData) => {
-  // Sample data points untuk avoid terlalu banyak data di chart
-  const sampleRate = Math.ceil(monthlyData.length / 24);
+  // Untuk 36 bulan, sample lebih banyak titik agar smooth
+  const sampleRate = Math.ceil(monthlyData.length / 18); // 18-20 titik untuk 36 bulan
   const sampledData = monthlyData.filter(
-    (_, index) => index % sampleRate === 0
+    (_, index) => index % sampleRate === 0 || index === monthlyData.length - 1
   );
 
   return {
@@ -358,8 +418,11 @@ const generateRoiGrowthChartData = (
       ((item.cumulativeProfit + initialInvestment) / initialInvestment) * 100,
   }));
 
-  const sampleRate = Math.ceil(roiData.length / 12);
-  const sampledROIData = roiData.filter((_, index) => index % sampleRate === 0);
+  // Sample rate yang sesuai untuk 36 bulan
+  const sampleRate = Math.ceil(roiData.length / 12); // 12 titik untuk 36 bulan
+  const sampledROIData = roiData.filter(
+    (_, index) => index % sampleRate === 0 || index === roiData.length - 1
+  );
 
   return {
     labels: sampledROIData.map((item) => `Month ${item.month}`),
@@ -393,7 +456,7 @@ const generatePerformanceMetrics = (roiResult) => {
       roi: roi_percentage,
       netProfit: net_profit,
       paybackPeriod: payback_period_years,
-      totalMonths: financialDetails.timeframe,
+      totalMonths: financialDetails.timeframe, // Timeframe asli dari user
     },
     averages: {
       monthlyRevenue: financialDetails.expected_monthly_revenue,
@@ -412,4 +475,32 @@ const generatePerformanceMetrics = (roiResult) => {
         (net_profit / financialDetails.initial_investment) * 100,
     },
   };
+};
+
+const calculateDynamicPaybackPeriod = (monthlyData, initialInvestment) => {
+  console.log("Payback calculation - Initial investment:", initialInvestment);
+
+  for (let i = 0; i < monthlyData.length; i++) {
+    const cumulativeProfit = monthlyData[i].cumulativeProfit;
+    console.log(`Month ${i + 1}: Cumulative Profit = ${cumulativeProfit}`);
+
+    // **PERBAIKAN: Break-even ketika cumulativeProfit >= 0**
+    if (cumulativeProfit >= 0) {
+      const paybackMonths = i + 1;
+      const paybackYears = paybackMonths / 12;
+      console.log(
+        `Break-even at month ${paybackMonths} (${paybackYears.toFixed(
+          2
+        )} years)`
+      );
+      return parseFloat(paybackYears.toFixed(2));
+    }
+  }
+
+  // Jika tidak mencapai break-even
+  const maxPayback = monthlyData.length / 12;
+  console.log(
+    `No break-even reached. Max payback: ${maxPayback.toFixed(2)} years`
+  );
+  return parseFloat(maxPayback.toFixed(2));
 };
