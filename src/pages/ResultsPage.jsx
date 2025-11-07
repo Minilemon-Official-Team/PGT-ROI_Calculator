@@ -33,7 +33,7 @@ function ResultsPage() {
   const getLatestRoiResult = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:3000/api/roi-results");
+      const res = await axios.get("/api/roi-results");
       const results = res.data.data;
 
       if (results.length > 0) {
@@ -111,7 +111,7 @@ function ResultsPage() {
           )}
           monthly_operating_cost={formatRupiah(
             result.total_operating_cost /
-            (result.financialDetails?.timeframe || 24)
+              (result.financialDetails?.timeframe || 24)
           )}
           monthly_profit={formatRupiah(
             result.net_profit / (result.financialDetails?.timeframe || 24)

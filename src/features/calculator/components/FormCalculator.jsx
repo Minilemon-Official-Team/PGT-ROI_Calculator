@@ -130,7 +130,7 @@ function FormCalculator({ totalProgress }) {
       console.log("Selected equipment names:", form.equipment);
       console.log("Mapped equipment IDs:", payload.equipments);
 
-      const response = await axios.post("http://localhost:3000/api/calculate-roi", payload);
+      const response = await axios.post("/api/calculate-roi", payload);
 
       if (response.status === 201) {
         console.log("ROI Calculation Result:", response.data);
