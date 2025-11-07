@@ -130,7 +130,7 @@ function FormCalculator({ totalProgress }) {
       console.log("Selected equipment names:", form.equipment);
       console.log("Mapped equipment IDs:", payload.equipments);
 
-      const response = await axios.post("/api/calculate-roi", payload);
+      const response = await axios.post("http://localhost:3000/api/calculate-roi", payload);
 
       if (response.status === 201) {
         console.log("ROI Calculation Result:", response.data);
@@ -220,13 +220,13 @@ function FormCalculator({ totalProgress }) {
                 <div
                   className="absolute h-4 bg-black rounded-full"
                   style={{
-                    width: `${((form.time_frame - 6) / (60 - 6)) * 100}%`,
+                    width: `${((form.time_frame - 6) / (36 - 6)) * 100}%`,
                   }}
                 ></div>
                 <input
                   type="range"
                   min={6}
-                  max={60}
+                  max={36}
                   step={6}
                   value={form.time_frame}
                   className="accent-white absolute left-0 w-full h-4 appearance-none bg-transparent cursor-pointer"
