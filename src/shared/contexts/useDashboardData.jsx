@@ -1,15 +1,18 @@
 // shared/hooks/useDashboardData.js - PERBAIKAN FILTER BULAN
-import { useContext, useMemo, useState } from "react";
+import { useContext, useMemo, useState, useEffect } from "react";
 import { NavStateContext } from "../contexts";
 
 export const useDashboardData = () => {
   const navState = useContext(NavStateContext);
   const { roiResult, period: initialPeriod } = navState;
 
-  // **PERBAIKAN: State untuk filter bulan di dashboard (bisa sampai 36 bulan)**
-  const [dashboardPeriod, setDashboardPeriod] = useState(
-    Math.min(initialPeriod, 36)
-  );
+  const [dashboardPeriod, setDashboardPeriod] = useState(36);
+
+  useEffect(() => {
+    if (initialPeriod && initialPeriod <= 36) {
+      setDashboardPeriod(initialPeriod);
+    }
+  }, [initialPeriod]);
 
   // Data untuk funding & models tab (dari BE)
   const fundingModelsData = useMemo(() => {
@@ -69,8 +72,8 @@ export const useDashboardData = () => {
       const roi =
         cumulativeInvestment > 0
           ? ((month.cumulativeProfit + initialInvestment) /
-              cumulativeInvestment) *
-            100
+            cumulativeInvestment) *
+          100
           : 0;
 
       return {
@@ -82,6 +85,7 @@ export const useDashboardData = () => {
       };
     });
 
+    console.log("roiTrajectory", roiTrajectory);
     return {
       initialInvestment,
       monthlyProjections: monthlyProjection,
@@ -112,8 +116,8 @@ export const useDashboardData = () => {
       const roi =
         cumulativeInvestment > 0
           ? ((month.cumulativeProfit + initialInvestment) /
-              cumulativeInvestment) *
-            100
+            cumulativeInvestment) *
+          100
           : 0;
 
       return {
@@ -165,7 +169,7 @@ export const useDashboardData = () => {
       formatRupiah: (amount) => `Rp${amount?.toLocaleString() || "0"}`,
       formatPercentage: (value) => `${value?.toFixed(1) || "0"}%`,
       dashboardPeriod: 12,
-      updateDashboardPeriod: () => {},
+      updateDashboardPeriod: () => { },
       maxAvailableMonths: 36,
     };
   }
